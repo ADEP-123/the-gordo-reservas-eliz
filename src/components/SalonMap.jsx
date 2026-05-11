@@ -1,60 +1,6 @@
+import { ZONAS_SALON } from "../data/zonasSalon";
+import { obtenerMesasPorZona, obtenerResumenZona } from "../utils/salonUtils";
 import "../styles/salonMap.css";
-
-const ZONAS_SALON = [
-  {
-    id: "zona-ventana",
-    nombre: "Zona ventana",
-    descripcion: "Vista lateral",
-    match: "ventana",
-    clase: "salon-map__zona--ventana",
-  },
-  {
-    id: "zona-central",
-    nombre: "Zona central",
-    descripcion: "Área principal",
-    match: "central",
-    clase: "salon-map__zona--central",
-  },
-  {
-    id: "terraza",
-    nombre: "Terraza",
-    descripcion: "Espacio abierto",
-    match: "terraza",
-    clase: "salon-map__zona--terraza",
-  },
-];
-
-function normalizarTexto(texto = "") {
-  return texto
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
-function obtenerMesasPorZona(mesas, zona) {
-  return mesas.filter(mesa => {
-    const ubicacion = normalizarTexto(mesa.ubicacion || mesa.zona || "");
-    return ubicacion.includes(zona.match);
-  });
-}
-
-function obtenerResumenZona(mesasZona) {
-  const mesasDisponibles = mesasZona.filter(
-    mesa => normalizarTexto(mesa.estado) === "disponible",
-  );
-
-  const asientosDisponibles = mesasDisponibles.reduce(
-    (total, mesa) => total + Number(mesa.capacidad || 0),
-    0,
-  );
-
-  return {
-    mesasDisponibles: mesasDisponibles.length,
-    asientosDisponibles,
-    mesasTotales: mesasZona.length,
-  };
-}
 
 function SalonMap({ mesas = [], zonaActivaId, onSeleccionarZona }) {
   const renderZona = zona => {
