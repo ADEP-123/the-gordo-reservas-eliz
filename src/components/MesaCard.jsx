@@ -1,4 +1,5 @@
 import "../styles/mesaCard.css";
+import MesaVisual from "./MesaVisual";
 
 function normalizarEstado(estado) {
   return estado?.toLowerCase() || "disponible";
@@ -44,9 +45,7 @@ function MesaCard({ mesa, seleccionada = false, onSeleccionar }) {
       </div>
 
       <div className="mesa-card__visual">
-        <div className="mesa-card__mesa-base">
-          <span className="mesa-card__mesa-brillo"></span>
-        </div>
+        <MesaVisual capacidad={mesa.capacidad} estado={estado} />
       </div>
 
       <div className="mesa-card__footer">
