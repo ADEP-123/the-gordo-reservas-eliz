@@ -4,11 +4,24 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <span className="navbar-logo">🍔</span>
-        <div>
-          <h1 className="navbar-title">Comidas Rápidas The Gordo</h1>
-          <p className="navbar-subtitle">Sistema de Reservas de Mesas</p>
+        <div className="navbar-brand">
+          <span className="navbar-logo">🍔</span>
+          <div>
+            <h1 className="navbar-title">The Gordo</h1>
+            <p className="navbar-subtitle">Reservas de Mesas</p>
+          </div>
         </div>
+        <ul className="navbar-links">
+          <li>
+            <a href="#">Inicio</a>
+          </li>
+          <li>
+            <a href="#">Menú</a>
+          </li>
+          <li>
+            <a href="#">Contacto</a>
+          </li>
+        </ul>
       </div>
     </nav>
   );
