@@ -1,27 +1,14 @@
-import { useState, useEffect } from "react";
-import { getMesas } from "../services/mesasService";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Leyenda from "../components/Leyenda";
 import SalonMap from "../components/SalonMap";
+import useMesas from "../hooks/useMesas";
 import "../styles/salonView.css";
 
 function SalonView() {
-  const [mesas, setMesas] = useState([]);
-  const [cargando, setCargando] = useState(true);
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
 
-  useEffect(() => {
-    cargarMesas();
-  }, []);
-
-  const cargarMesas = async () => {
-    setCargando(true);
-
-    const data = await getMesas();
-
-    setMesas(data);
-    setCargando(false);
-  };
+  const { mesas, cargando, error } = useMesas();
 
   return (
     <div className="salon-view">
@@ -36,9 +23,18 @@ function SalonView() {
 
       <Leyenda />
 
-      {cargando ? (
+      {cargando && (
         <div className="salon-view__loading">⏳ Cargando salón...</div>
-      ) : (
+      )}
+
+      {!cargando && error && (
+        <div className="salon-view__error">
+          <strong>Ocurrió un problema</strong>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {!cargando && !error && (
         <>
           <SalonMap
             mesas={mesas}

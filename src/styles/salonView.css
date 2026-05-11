@@ -121,6 +121,36 @@
   border-top: 1px solid var(--color-border);
 }
 
+/* Error */
+
+.salon-view__error {
+  width: min(720px, calc(100% - 3rem));
+  margin: 3rem auto;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(255, 78, 106, 0.26);
+  border-radius: 18px;
+  color: #fff4e8;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 78, 106, 0.14),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.05);
+}
+
+.salon-view__error strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #ff8c72;
+  font-size: 1rem;
+}
+
+.salon-view__error p {
+  margin: 0;
+  color: #c8a98d;
+}
+
 /* Responsive */
 
 @media (max-width: 640px) {
