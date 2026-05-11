@@ -1,0 +1,19 @@
+.salon-view {
+  min-height: 100vh;
+  background: #1a1a2e;
+  color: #ffffff;
+  font-family: sans-serif;
+  padding-bottom: 60px;
+}
+
+.salon-view__footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 12px;
+  font-size: 13px;
+  color: #718096;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}

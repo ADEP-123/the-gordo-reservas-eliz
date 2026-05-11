@@ -1,0 +1,30 @@
+.leyenda-container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.leyenda {
+  display: flex;
+  gap: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leyenda-item {
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.leyenda-hint {
+  color: #a0aec0;
+  font-size: 13px;
+  margin: 0;
+}
