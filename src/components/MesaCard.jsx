@@ -1,44 +1,66 @@
 import "../styles/mesaCard.css";
 
-const getColorMesa = estado => {
-  switch (estado) {
-    case "disponible":
-      return "#48bb78";
-    case "ocupada":
-      return "#fc8181";
-    case "bloqueada":
-      return "#a0aec0";
-    default:
-      return "#a0aec0";
-  }
-};
+function normalizarEstado(estado) {
+  return estado?.toLowerCase() || "disponible";
+}
 
-const getEmojiMesa = estado => {
-  switch (estado) {
-    case "disponible":
-      return "🟢";
-    case "ocupada":
-      return "🔴";
-    case "bloqueada":
-      return "⚫";
-    default:
-      return "⚫";
-  }
-};
+function obtenerTextoEstado(estado) {
+  const estadoNormalizado = normalizarEstado(estado);
 
-function MesaCard({ mesa, seleccionada, onClick }) {
-  const disponible = mesa.estado === "disponible";
+  const textos = {
+    disponible: "Disponible",
+    ocupada: "Ocupada",
+    bloqueada: "Bloqueada",
+  };
+
+  return textos[estadoNormalizado] || estado;
+}
+
+function MesaCard({ mesa, seleccionada = false, onSeleccionar }) {
+  const estado = normalizarEstado(mesa.estado);
+  const estaDisponible = estado === "disponible";
+
+  const handleClick = () => {
+    if (!estaDisponible) return;
+    onSeleccionar(mesa);
+  };
 
   return (
-    <div
-      className={`mesa-card ${seleccionada ? "mesa-card--seleccionada" : ""} ${!disponible ? "mesa-card--inactiva" : ""}`}
-      style={{ background: getColorMesa(mesa.estado) }}
-      onClick={() => disponible && onClick(mesa)}
+    <button
+      type="button"
+      className={`mesa-card mesa-card--${estado} ${
+        seleccionada ? "mesa-card--seleccionada" : ""
+      }`}
+      onClick={handleClick}
+      disabled={!estaDisponible}
     >
-      <span className="mesa-card__numero">Mesa {mesa.numero}</span>
-      <span className="mesa-card__emoji">{getEmojiMesa(mesa.estado)}</span>
-      <span className="mesa-card__capacidad">👥 {mesa.capacidad} personas</span>
-    </div>
+      <div className="mesa-card__header">
+        <h3>Mesa {mesa.numero}</h3>
+
+        <span className="mesa-card__badge">
+          <span className="mesa-card__estado-punto"></span>
+          {obtenerTextoEstado(mesa.estado)}
+        </span>
+      </div>
+
+      <div className="mesa-card__visual">
+        <div className="mesa-card__mesa-base">
+          <span className="mesa-card__mesa-brillo"></span>
+        </div>
+      </div>
+
+      <div className="mesa-card__footer">
+        <span className="mesa-card__capacidad">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3ZM8 11c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5C23 14.17 18.33 13 16 13Z"
+              fill="currentColor"
+            />
+          </svg>
+          {mesa.capacidad} personas
+        </span>
+      </div>
+    </button>
   );
 }
 

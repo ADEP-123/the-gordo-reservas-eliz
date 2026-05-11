@@ -1,48 +1,253 @@
 .mesa-card {
-  width: 150px;
-  height: 130px;
-  border-radius: var(--radius-card);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.25s ease;
+  position: relative;
+  width: 190px;
+  min-height: 185px;
+  padding: 1rem;
+  border: 1px solid rgba(70, 212, 131, 0.2);
+  border-radius: 20px;
+  color: #fff4e8;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 155, 5, 0.14), transparent 34%),
+    linear-gradient(145deg, #2a1712, #180d0a);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   cursor: pointer;
-  box-shadow: var(--shadow-card);
-  border: 2px solid transparent;
+  appearance: none;
+  font-family: inherit;
+  text-align: left;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
-.mesa-card:hover:not(.mesa-card--inactiva) {
-  transform: translateY(-4px);
-  border-color: var(--color-primary);
+.mesa-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 155, 5, 0.6);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.42),
+    0 0 24px rgba(249, 87, 42, 0.18);
 }
 
-.mesa-card--seleccionada {
-  transform: scale(1.08);
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 24px rgba(233, 86, 43, 0.5);
-}
-
-.mesa-card--inactiva {
+.mesa-card:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  transform: none;
 }
 
-.mesa-card__numero {
-  font-weight: 800;
-  font-size: 16px;
-  color: #1a1a1a;
+.mesa-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.mesa-card__header h3 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.04rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
-.mesa-card__emoji {
-  font-size: 22px;
+.mesa-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+  color: #f8eadb;
+  background: rgba(255, 255, 255, 0.09);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.mesa-card__estado-punto {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: #46d483;
+  box-shadow: 0 0 10px rgba(70, 212, 131, 0.8);
+}
+
+.mesa-card__visual {
+  display: grid;
+  place-items: center;
+  min-height: 92px;
+  margin: 0.95rem 0 0.75rem;
+}
+
+.mesa-card__mesa-base {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 244, 232, 0.42),
+      transparent 24%
+    ),
+    radial-gradient(circle at center, #ff8a1f 0%, #f9572a 48%, #b9401f 100%);
+  box-shadow:
+    inset 0 -10px 18px rgba(0, 0, 0, 0.22),
+    inset 0 6px 12px rgba(255, 255, 255, 0.16),
+    0 14px 28px rgba(249, 87, 42, 0.24);
+}
+
+.mesa-card__mesa-base::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 201, 5, 0.18);
+}
+
+.mesa-card__mesa-brillo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  filter: blur(2px);
+}
+
+.mesa-card__footer {
+  display: flex;
+  justify-content: center;
 }
 
 .mesa-card__capacidad {
-  font-size: 12px;
-  color: #1a1a1a;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 120px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.075);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mesa-card__capacidad svg {
+  color: #ffc905;
+  flex-shrink: 0;
+}
+
+/* Estados */
+
+.mesa-card--disponible {
+  border-color: rgba(70, 212, 131, 0.24);
+}
+
+.mesa-card--disponible .mesa-card__estado-punto {
+  background: #46d483;
+  box-shadow: 0 0 10px rgba(70, 212, 131, 0.8);
+}
+
+.mesa-card--ocupada {
+  opacity: 0.82;
+  border-color: rgba(255, 78, 106, 0.28);
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(255, 78, 106, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #241411, #150c0a);
+}
+
+.mesa-card--ocupada .mesa-card__estado-punto {
+  background: #ff4e6a;
+  box-shadow: 0 0 10px rgba(255, 78, 106, 0.75);
+}
+
+.mesa-card--ocupada .mesa-card__mesa-base {
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 255, 255, 0.2),
+      transparent 24%
+    ),
+    radial-gradient(circle at center, #7a3738 0%, #52272a 52%, #2a1518 100%);
+  box-shadow:
+    inset 0 -10px 18px rgba(0, 0, 0, 0.26),
+    0 12px 24px rgba(255, 78, 106, 0.12);
+}
+
+.mesa-card--bloqueada {
+  opacity: 0.66;
+  border-color: rgba(119, 111, 145, 0.28);
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(119, 111, 145, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #211b22, #141015);
+}
+
+.mesa-card--bloqueada .mesa-card__estado-punto {
+  background: #777090;
+  box-shadow: 0 0 10px rgba(119, 112, 144, 0.65);
+}
+
+.mesa-card--bloqueada .mesa-card__mesa-base {
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 255, 255, 0.15),
+      transparent 24%
+    ),
+    radial-gradient(circle at center, #625a72 0%, #443c51 52%, #272331 100%);
+  box-shadow:
+    inset 0 -10px 18px rgba(0, 0, 0, 0.26),
+    0 12px 24px rgba(119, 112, 144, 0.12);
+}
+
+/* Selección */
+
+.mesa-card--seleccionada {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(255, 201, 5, 0.92);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.46),
+    0 0 0 3px rgba(255, 201, 5, 0.14),
+    0 0 30px rgba(249, 87, 42, 0.34);
+}
+
+.mesa-card--seleccionada::after {
+  content: "Seleccionada";
+  position: absolute;
+  left: 50%;
+  bottom: -0.78rem;
+  transform: translateX(-50%);
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+  font-size: 0.62rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .mesa-card {
+    width: 100%;
+    min-height: 170px;
+  }
 }

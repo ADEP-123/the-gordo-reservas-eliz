@@ -57,7 +57,7 @@ function SalonView() {
                     key={mesa.id}
                     mesa={mesa}
                     seleccionada={mesaSeleccionada?.id === mesa.id}
-                    onClick={setMesaSeleccionada}
+                    onSeleccionar={setMesaSeleccionada}
                   />
                 ))}
               </div>
