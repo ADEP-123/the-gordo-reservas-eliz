@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { getMesas } from "../services/mesasService";
 import Navbar from "../components/Navbar";
 import Leyenda from "../components/Leyenda";
-import MesaCard from "../components/MesaCard";
-import PanelSeleccion from "../components/PanelSeleccion";
+import SalonMap from "../components/SalonMap";
 import "../styles/salonView.css";
 
 function SalonView() {
   const [mesas, setMesas] = useState([]);
-  const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [cargando, setCargando] = useState(true);
+  const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
 
   useEffect(() => {
     cargarMesas();
@@ -17,61 +16,55 @@ function SalonView() {
 
   const cargarMesas = async () => {
     setCargando(true);
+
     const data = await getMesas();
+
     setMesas(data);
     setCargando(false);
-  };
-
-  const agruparPorZona = () => {
-    return mesas.reduce((acc, mesa) => {
-      if (!acc[mesa.ubicacion]) acc[mesa.ubicacion] = [];
-      acc[mesa.ubicacion].push(mesa);
-      return acc;
-    }, {});
   };
 
   return (
     <div className="salon-view">
       <Navbar />
 
-      {/* HERO */}
-      <div className="salon-view__hero">
+      <header className="salon-view__hero">
         <h2>
           Reserva tu <span>Mesa</span>
         </h2>
-        <p>Selecciona una mesa disponible y reserva en menos de 3 minutos</p>
-      </div>
+        <p>Explora el salón, elige una zona y selecciona tu mesa ideal</p>
+      </header>
 
       <Leyenda />
 
       {cargando ? (
         <div className="salon-view__loading">⏳ Cargando salón...</div>
       ) : (
-        <div className="salon-view__salon">
-          {Object.entries(agruparPorZona()).map(([zona, mesasZona]) => (
-            <div key={zona} className="salon-view__zona">
-              <h2 className="salon-view__zona-title">📍 {zona}</h2>
-              <div className="salon-view__mesas-grid">
-                {mesasZona.map(mesa => (
-                  <MesaCard
-                    key={mesa.id}
-                    mesa={mesa}
-                    seleccionada={mesaSeleccionada?.id === mesa.id}
-                    onSeleccionar={setMesaSeleccionada}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+        <>
+          <SalonMap
+            mesas={mesas}
+            zonaActivaId={zonaSeleccionada?.id}
+            onSeleccionarZona={setZonaSeleccionada}
+          />
 
-      {mesaSeleccionada && (
-        <PanelSeleccion
-          mesa={mesaSeleccionada}
-          onReservar={() => alert("Aquí irá el formulario (Fase 3)")}
-          onCancelar={() => setMesaSeleccionada(null)}
-        />
+          {zonaSeleccionada && (
+            <div className="zona-preview">
+              <div>
+                <span>Zona seleccionada</span>
+                <strong>{zonaSeleccionada.nombre}</strong>
+
+                <p>
+                  {zonaSeleccionada.resumen.mesasDisponibles} mesas disponibles
+                  · {zonaSeleccionada.resumen.asientosDisponibles} asientos
+                  disponibles
+                </p>
+              </div>
+
+              <button type="button" onClick={() => setZonaSeleccionada(null)}>
+                Cerrar
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       <footer className="salon-view__footer">
