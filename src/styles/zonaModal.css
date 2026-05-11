@@ -1,0 +1,274 @@
+.zona-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(7px);
+}
+
+.zona-modal {
+  position: relative;
+  width: min(1120px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.6rem;
+  border-radius: 26px;
+  color: #fff4e8;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(249, 87, 42, 0.14),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 201, 5, 0.08),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #21120e, #100705);
+  border: 1px solid rgba(255, 155, 5, 0.22);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+}
+
+.zona-modal__cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: none;
+  border-radius: 50%;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.zona-modal__cerrar:hover {
+  background: rgba(249, 87, 42, 0.82);
+  transform: rotate(90deg);
+}
+
+.zona-modal__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-right: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.zona-modal__label {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  color: #ff9b05;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.zona-modal__header h2 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.zona-modal__header p {
+  max-width: 520px;
+  margin: 0.65rem 0 0;
+  color: #c8a98d;
+  line-height: 1.5;
+}
+
+.zona-modal__stats {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.zona-modal__stats div {
+  min-width: 130px;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.zona-modal__stats strong {
+  display: block;
+  color: #46d483;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.zona-modal__stats span {
+  display: block;
+  margin-top: 0.35rem;
+  color: #d8c3ad;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.zona-modal__body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.zona-modal__mesas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.15rem;
+  padding: 1rem;
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.zona-modal__seleccion {
+  position: sticky;
+  top: 1rem;
+  padding: 1.15rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 5, 0.1),
+      transparent 36%
+    ),
+    rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 201, 5, 0.14);
+}
+
+.zona-modal__seleccion span {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #ff9b05;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.zona-modal__seleccion h3 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: 1.45rem;
+}
+
+.zona-modal__seleccion p {
+  margin: 0.7rem 0 0;
+  color: #c8a98d;
+  line-height: 1.5;
+}
+
+.zona-modal__detalle {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0;
+}
+
+.zona-modal__detalle p {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.zona-modal__detalle strong {
+  color: #fff4e8;
+}
+
+.zona-modal__reservar {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 14px;
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.zona-modal__reservar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(255, 155, 5, 0.22);
+}
+
+.zona-modal__empty {
+  padding: 2rem;
+  border-radius: 18px;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px dashed rgba(255, 201, 5, 0.18);
+}
+
+.zona-modal__empty strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.zona-modal__empty p {
+  margin: 0;
+  color: #c8a98d;
+}
+
+@media (max-width: 850px) {
+  .zona-modal__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .zona-modal__stats {
+    width: 100%;
+  }
+
+  .zona-modal__stats div {
+    flex: 1;
+  }
+
+  .zona-modal__body {
+    grid-template-columns: 1fr;
+  }
+
+  .zona-modal__seleccion {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .zona-modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .zona-modal {
+    padding: 1.2rem;
+  }
+
+  .zona-modal__header {
+    padding-right: 2.8rem;
+  }
+
+  .zona-modal__stats {
+    flex-direction: column;
+  }
+
+  .zona-modal__mesas {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,13 +2,34 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Leyenda from "../components/Leyenda";
 import SalonMap from "../components/SalonMap";
+import ZonaModal from "../components/ZonaModal";
 import useMesas from "../hooks/useMesas";
 import "../styles/salonView.css";
 
 function SalonView() {
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
+  const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
 
   const { mesas, cargando, error } = useMesas();
+
+  const seleccionarZona = zona => {
+    setZonaSeleccionada(zona);
+    setMesaSeleccionada(null);
+  };
+
+  const cerrarZonaModal = () => {
+    setZonaSeleccionada(null);
+    setMesaSeleccionada(null);
+  };
+
+  const reservarMesaSeleccionada = () => {
+    if (!mesaSeleccionada) return;
+
+    console.log("Mesa lista para reservar:", mesaSeleccionada);
+    alert(
+      `Aquí irá el formulario para reservar la Mesa ${mesaSeleccionada.numero}`,
+    );
+  };
 
   return (
     <div className="salon-view">
@@ -35,32 +56,21 @@ function SalonView() {
       )}
 
       {!cargando && !error && (
-        <>
-          <SalonMap
-            mesas={mesas}
-            zonaActivaId={zonaSeleccionada?.id}
-            onSeleccionarZona={setZonaSeleccionada}
-          />
+        <SalonMap
+          mesas={mesas}
+          zonaActivaId={zonaSeleccionada?.id}
+          onSeleccionarZona={seleccionarZona}
+        />
+      )}
 
-          {zonaSeleccionada && (
-            <div className="zona-preview">
-              <div>
-                <span>Zona seleccionada</span>
-                <strong>{zonaSeleccionada.nombre}</strong>
-
-                <p>
-                  {zonaSeleccionada.resumen.mesasDisponibles} mesas disponibles
-                  · {zonaSeleccionada.resumen.asientosDisponibles} asientos
-                  disponibles
-                </p>
-              </div>
-
-              <button type="button" onClick={() => setZonaSeleccionada(null)}>
-                Cerrar
-              </button>
-            </div>
-          )}
-        </>
+      {zonaSeleccionada && (
+        <ZonaModal
+          zona={zonaSeleccionada}
+          mesaSeleccionada={mesaSeleccionada}
+          onSeleccionarMesa={setMesaSeleccionada}
+          onCerrar={cerrarZonaModal}
+          onReservar={reservarMesaSeleccionada}
+        />
       )}
 
       <footer className="salon-view__footer">

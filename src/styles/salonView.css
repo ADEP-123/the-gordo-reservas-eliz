@@ -46,67 +46,6 @@
   color: var(--color-text-muted);
 }
 
-/* Preview temporal de zona seleccionada */
-
-.zona-preview {
-  width: min(1120px, calc(100% - 3rem));
-  margin: -1.5rem auto 3rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid rgba(255, 155, 5, 0.2);
-  border-radius: 18px;
-  color: #fff4e8;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(255, 155, 5, 0.12),
-      transparent 34%
-    ),
-    rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.zona-preview span {
-  display: block;
-  margin-bottom: 0.25rem;
-  color: #c8a98d;
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08rem;
-}
-
-.zona-preview strong {
-  display: block;
-  font-size: 1.2rem;
-}
-
-.zona-preview p {
-  margin: 0.35rem 0 0;
-  color: #c8a98d;
-  font-size: 0.9rem;
-}
-
-.zona-preview button {
-  border: none;
-  border-radius: 999px;
-  padding: 0.65rem 1rem;
-  color: #1a0f0c;
-  background: linear-gradient(90deg, #ffc905, #ff9b05);
-  font-weight: 900;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.zona-preview button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(255, 155, 5, 0.22);
-}
-
 /* Footer */
 
 .salon-view__footer {
@@ -160,17 +99,6 @@
 
   .salon-view__hero {
     padding: 20px 20px 18px;
-  }
-
-  .zona-preview {
-    width: calc(100% - 2rem);
-    margin: -1rem auto 2rem;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .zona-preview button {
-    width: 100%;
   }
 
   .salon-view__footer {
