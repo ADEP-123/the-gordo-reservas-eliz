@@ -1,0 +1,2 @@
+export const DURACION_RESERVA_MINUTOS = 60;
+export const INTERVALO_HORARIOS_MINUTOS = 30;

@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { existeCruceDeReservas, normalizarHora } from "../utils/reservaUtils";
 
 // Obtener todas las reservas
 export const getReservas = async () => {
@@ -16,6 +17,7 @@ export const getReservas = async () => {
     console.error("Error al obtener reservas:", error);
     return [];
   }
+
   return data;
 };
 
@@ -36,17 +38,19 @@ export const getReservasByFecha = async fecha => {
     console.error("Error al obtener reservas por fecha:", error);
     return [];
   }
+
   return data;
 };
 
-// Verificar si una mesa está disponible para fecha y hora
+// Verificar si una mesa está disponible para fecha y rango horario
 export const verificarDisponibilidad = async (mesa_id, fecha, hora) => {
+  const horaNormalizada = normalizarHora(hora);
+
   const { data, error } = await supabase
     .from("reservas")
-    .select("id")
+    .select("id, hora")
     .eq("mesa_id", mesa_id)
     .eq("fecha", fecha)
-    .eq("hora", hora)
     .eq("estado", "activa");
 
   if (error) {
@@ -54,27 +58,30 @@ export const verificarDisponibilidad = async (mesa_id, fecha, hora) => {
     return false;
   }
 
-  // Si no hay reservas para esa mesa, fecha y hora, está disponible
-  return data.length === 0;
+  return !existeCruceDeReservas(data || [], horaNormalizada);
 };
 
 // Crear una nueva reserva
 export const createReserva = async reserva => {
-  // Verificar disponibilidad antes de crear
+  const reservaNormalizada = {
+    ...reserva,
+    hora: normalizarHora(reserva.hora),
+  };
+
   const disponible = await verificarDisponibilidad(
-    reserva.mesa_id,
-    reserva.fecha,
-    reserva.hora,
+    reservaNormalizada.mesa_id,
+    reservaNormalizada.fecha,
+    reservaNormalizada.hora,
   );
 
   if (!disponible) {
-    console.error("La mesa no está disponible para ese horario");
-    return { error: "Mesa no disponible para ese horario" };
+    console.error("La mesa no está disponible para ese rango horario");
+    return { error: "Mesa no disponible para ese rango horario" };
   }
 
   const { data, error } = await supabase
     .from("reservas")
-    .insert([reserva])
+    .insert([reservaNormalizada])
     .select()
     .single();
 
@@ -82,6 +89,7 @@ export const createReserva = async reserva => {
     console.error("Error al crear reserva:", error);
     return { error };
   }
+
   return { data };
 };
 
@@ -98,5 +106,6 @@ export const cancelarReserva = async id => {
     console.error("Error al cancelar reserva:", error);
     return null;
   }
+
   return data;
 };

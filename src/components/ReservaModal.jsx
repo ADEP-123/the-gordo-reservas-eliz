@@ -1,5 +1,10 @@
 import { useState } from "react";
 import "../styles/reservaModal.css";
+import { INTERVALO_HORARIOS_MINUTOS } from "../data/reservaConfig";
+import {
+  horaRespetaIntervalo,
+  obtenerTextoDuracionReserva,
+} from "../utils/reservaUtils";
 
 function obtenerFechaActual() {
   return new Date().toISOString().split("T")[0];
@@ -56,6 +61,13 @@ function ReservaModal({ mesa, zona, onCerrar, onVolver, onContinuar }) {
 
     if (!formData.hora) {
       nuevosErrores.hora = "Selecciona una hora.";
+    }
+
+    if (
+      formData.hora &&
+      !horaRespetaIntervalo(formData.hora, INTERVALO_HORARIOS_MINUTOS)
+    ) {
+      nuevosErrores.hora = `Selecciona una hora en intervalos de ${INTERVALO_HORARIOS_MINUTOS} minutos.`;
     }
 
     if (!cantidadPersonas || cantidadPersonas < 1) {
@@ -201,10 +213,18 @@ function ReservaModal({ mesa, zona, onCerrar, onVolver, onContinuar }) {
                   id="hora"
                   name="hora"
                   type="time"
+                  step={INTERVALO_HORARIOS_MINUTOS * 60}
                   value={formData.hora}
                   onChange={handleChange}
                 />
                 {errores.hora && <small>{errores.hora}</small>}
+
+                {!errores.hora && (
+                  <small className="reserva-modal__ayuda">
+                    Cada reserva bloquea la mesa por{" "}
+                    {obtenerTextoDuracionReserva()}.
+                  </small>
+                )}
               </div>
             </div>
 
