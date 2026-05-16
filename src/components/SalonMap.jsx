@@ -29,12 +29,28 @@ function SalonMap({ mesas = [], zonaActivaId, onSeleccionarZona }) {
 
         <div className="salon-map__zona-resumen">
           <span>
-            <b>{resumen.mesasDisponibles}</b>
+            <b
+              className={
+                resumen.mesasDisponibles === 0
+                  ? "salon-map__contador salon-map__contador--vacio"
+                  : "salon-map__contador"
+              }
+            >
+              {resumen.mesasDisponibles}
+            </b>
             mesas disponibles
           </span>
 
           <span>
-            <b>{resumen.asientosDisponibles}</b>
+            <b
+              className={
+                resumen.asientosDisponibles === 0
+                  ? "salon-map__contador salon-map__contador--vacio"
+                  : "salon-map__contador"
+              }
+            >
+              {resumen.asientosDisponibles}
+            </b>
             asientos disponibles
           </span>
         </div>

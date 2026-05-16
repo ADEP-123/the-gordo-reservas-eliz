@@ -3,7 +3,9 @@ import { obtenerOCrearCliente } from "./clientesService";
 import { getConfiguracionReservas } from "./configuracionReservasService";
 import {
   calcularHoraFin,
+  calcularMinimoPersonasMesa,
   existeCruceDeReservas,
+  mesaCumpleOcupacionMinima,
   normalizarHora,
 } from "../utils/reservaUtils";
 
@@ -157,20 +159,54 @@ export const getMesasConDisponibilidad = async ({
     );
 
     const tieneCruce = existeCruceDeReservas(reservasMesa, nuevaReserva);
-    const noCumpleCapacidad = Number(mesa.capacidad) < Number(num_personas);
+    const capacidadMesa = Number(mesa.capacidad);
+    const personasSolicitadas = Number(num_personas);
+    const ocupacionMinimaPorcentaje = Number(
+      configuracion.ocupacion_minima_porcentaje,
+    );
+
+    const minimoPersonasMesa = calcularMinimoPersonasMesa(
+      capacidadMesa,
+      ocupacionMinimaPorcentaje,
+    );
+
+    const noCumpleCapacidad = personasSolicitadas > capacidadMesa;
+    const noCumpleMinimo = !mesaCumpleOcupacionMinima({
+      capacidad: capacidadMesa,
+      numPersonas: personasSolicitadas,
+      ocupacionMinimaPorcentaje,
+    });
+
     const estaBloqueada = mesa.estado === "bloqueada";
 
     const disponibleParaCriterio =
-      !tieneCruce && !noCumpleCapacidad && !estaBloqueada;
+      !tieneCruce && !noCumpleCapacidad && !noCumpleMinimo && !estaBloqueada;
+
+    let estadoCalculado = "disponible";
+
+    if (estaBloqueada) {
+      estadoCalculado = "bloqueada";
+    } else if (tieneCruce || noCumpleCapacidad) {
+      estadoCalculado = "ocupada";
+    } else if (noCumpleMinimo) {
+      estadoCalculado = "ocupacion_baja";
+    }
 
     return {
       ...mesa,
       disponible_para_criterio: disponibleParaCriterio,
       estado_original: mesa.estado,
-      estado:
-        disponibleParaCriterio && mesa.estado === "disponible"
-          ? "disponible"
-          : "ocupada",
+      minimo_personas_requerido: minimoPersonasMesa,
+      motivo_no_disponibilidad: tieneCruce
+        ? "Mesa reservada en ese horario"
+        : noCumpleCapacidad
+          ? "La mesa no tiene capacidad suficiente"
+          : noCumpleMinimo
+            ? `Requiere mínimo ${minimoPersonasMesa} personas`
+            : estaBloqueada
+              ? "Mesa bloqueada"
+              : null,
+      estado: estadoCalculado,
     };
   });
 };

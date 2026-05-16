@@ -31,6 +31,11 @@ function BusquedaDisponibilidad({
       RESERVA_CONFIG_DEFAULT.duracion_reserva_minutos,
   );
 
+  const ocupacionMinimaPorcentaje = Number(
+    configuracion?.ocupacion_minima_porcentaje ||
+      RESERVA_CONFIG_DEFAULT.ocupacion_minima_porcentaje,
+  );
+
   const [formData, setFormData] = useState({
     fecha: fechaActual,
     hora: "19:00",
@@ -174,6 +179,10 @@ function BusquedaDisponibilidad({
 
         <span>
           Intervalos: <strong>cada {intervaloMinutos} min</strong>
+        </span>
+
+        <span>
+          Ocupación mínima: <strong>{ocupacionMinimaPorcentaje}%</strong>
         </span>
       </div>
 

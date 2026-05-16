@@ -11,4 +11,8 @@ export const ESTADOS_MESA = {
     valor: "bloqueada",
     texto: "Bloqueada",
   },
+  ocupacion_baja: {
+    valor: "ocupacion_baja",
+    texto: "Poca ocupación",
+  },
 };

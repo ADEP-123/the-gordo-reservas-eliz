@@ -65,3 +65,25 @@ export function existeCruceDeReservas(reservas = [], nuevaReserva) {
 export function horaRespetaIntervalo(hora, intervaloMinutos) {
   return convertirHoraAMinutos(hora) % Number(intervaloMinutos) === 0;
 }
+
+export function calcularMinimoPersonasMesa(
+  capacidad,
+  ocupacionMinimaPorcentaje,
+) {
+  return Math.ceil(
+    Number(capacidad) * (Number(ocupacionMinimaPorcentaje) / 100),
+  );
+}
+
+export function mesaCumpleOcupacionMinima({
+  capacidad,
+  numPersonas,
+  ocupacionMinimaPorcentaje,
+}) {
+  const minimoPersonas = calcularMinimoPersonasMesa(
+    capacidad,
+    ocupacionMinimaPorcentaje,
+  );
+
+  return Number(numPersonas) >= minimoPersonas;
+}

@@ -248,7 +248,7 @@
   font-weight: 800;
 }
 
-.salon-map__zona-resumen b {
+.salon-map__contador {
   display: grid;
   place-items: center;
   min-width: 1.8rem;
@@ -259,6 +259,12 @@
   font-size: 0.8rem;
   font-weight: 900;
   box-shadow: 0 0 14px rgba(70, 212, 131, 0.32);
+}
+
+.salon-map__contador--vacio {
+  color: #d8d2ca;
+  background: #5c5660;
+  box-shadow: none;
 }
 
 /* Ubicación de áreas */

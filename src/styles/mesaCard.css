@@ -38,39 +38,45 @@
 }
 
 .mesa-card__header {
+  position: relative;
+  z-index: 2;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.75rem;
-  width: 100%;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
 
 .mesa-card__header h3 {
+  min-width: 0;
   margin: 0;
-  color: #fff4e8;
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 0.04rem;
-  text-transform: uppercase;
-  white-space: nowrap;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  flex: 1 1 auto;
 }
 
 .mesa-card__badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  flex-shrink: 0;
-  padding: 0.32rem 0.55rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.28rem 0.52rem;
   border-radius: 999px;
-  color: #f8eadb;
-  background: rgba(255, 255, 255, 0.09);
-  font-size: 0.62rem;
-  font-weight: 800;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.64rem;
+  font-weight: 900;
   line-height: 1;
   white-space: nowrap;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.mesa-card--ocupacion_baja .mesa-card__badge {
+  flex-basis: 100%;
+  width: fit-content;
+  max-width: 100%;
+  justify-content: flex-start;
+  color: #fff4e8;
+  background: rgba(255, 201, 5, 0.14);
 }
 
 .mesa-card__estado-punto {
@@ -182,6 +188,38 @@
   box-shadow:
     inset 0 -10px 18px rgba(0, 0, 0, 0.26),
     0 12px 24px rgba(119, 112, 144, 0.12);
+}
+
+.mesa-card--ocupacion_baja {
+  opacity: 0.78;
+  border-color: rgba(255, 201, 5, 0.28);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 201, 5, 0.12), transparent 34%),
+    linear-gradient(145deg, #25180f, #160d08);
+}
+
+.mesa-card--ocupacion_baja .mesa-card__estado-punto {
+  background: #ffc905;
+  box-shadow: 0 0 10px rgba(255, 201, 5, 0.7);
+}
+
+.mesa-card--ocupacion_baja .mesa-visual__mesa {
+  background:
+    radial-gradient(
+      circle at 35% 28%,
+      rgba(255, 255, 255, 0.2),
+      transparent 24%
+    ),
+    radial-gradient(circle at center, #9b7120 0%, #715018 52%, #33240d 100%);
+  box-shadow:
+    inset 0 -10px 18px rgba(0, 0, 0, 0.26),
+    0 12px 24px rgba(255, 201, 5, 0.12);
+}
+
+.mesa-card--ocupacion_baja .mesa-visual__silla {
+  border-color: rgba(255, 201, 5, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 244, 232, 0.14), transparent), #302514;
 }
 
 /* Selección */
