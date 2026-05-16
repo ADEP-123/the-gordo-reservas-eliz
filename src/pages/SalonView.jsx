@@ -6,9 +6,13 @@ import ZonaModal from "../components/ZonaModal";
 import ReservaModal from "../components/ReservaModal";
 import ConfirmacionReservaModal from "../components/ConfirmacionReservaModal";
 import useMesas from "../hooks/useMesas";
+import useConfiguracionReservas from "../hooks/useConfiguracionReservas";
 import "../styles/salonView.css";
 
 function SalonView() {
+  const { configuracion, cargandoConfiguracion, errorConfiguracion } =
+    useConfiguracionReservas();
+
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [formularioReservaAbierto, setFormularioReservaAbierto] =
@@ -73,18 +77,18 @@ function SalonView() {
 
       <Leyenda />
 
-      {cargando && (
+      {(cargando || cargandoConfiguracion) && (
         <div className="salon-view__loading">⏳ Cargando salón...</div>
       )}
 
-      {!cargando && error && (
+      {!cargando && !cargandoConfiguracion && (error || errorConfiguracion) && (
         <div className="salon-view__error">
           <strong>Ocurrió un problema</strong>
-          <p>{error}</p>
+          <p>{error || errorConfiguracion}</p>
         </div>
       )}
 
-      {!cargando && !error && (
+      {!cargando && !cargandoConfiguracion && !error && !errorConfiguracion && (
         <SalonMap
           mesas={mesas}
           zonaActivaId={zonaSeleccionada?.id}
@@ -106,6 +110,7 @@ function SalonView() {
         <ReservaModal
           mesa={mesaSeleccionada}
           zona={zonaSeleccionada}
+          configuracion={configuracion}
           reservaInicial={reservaBorrador}
           onCerrar={cerrarFormularioReserva}
           onVolver={cerrarFormularioReserva}

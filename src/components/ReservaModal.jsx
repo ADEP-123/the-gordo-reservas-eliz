@@ -1,13 +1,19 @@
 import { useState } from "react";
-import "../styles/reservaModal.css";
-import { INTERVALO_HORARIOS_MINUTOS } from "../data/reservaConfig";
+import { RESERVA_CONFIG_DEFAULT } from "../data/reservaConfig";
 import {
+  calcularHoraFin,
   horaRespetaIntervalo,
-  obtenerTextoDuracionReserva,
+  normalizarHora,
 } from "../utils/reservaUtils";
+import "../styles/reservaModal.css";
 
 function obtenerFechaActual() {
   return new Date().toISOString().split("T")[0];
+}
+
+function obtenerTextoDuracionReserva(duracionMinutos) {
+  if (Number(duracionMinutos) === 60) return "1 hora";
+  return `${duracionMinutos} minutos`;
 }
 
 function crearEstadoInicialFormulario(reservaInicial, fechaActual) {
@@ -18,19 +24,30 @@ function crearEstadoInicialFormulario(reservaInicial, fechaActual) {
     fecha: reservaInicial?.fecha || fechaActual,
     hora: reservaInicial?.hora || "19:00",
     personas: reservaInicial?.num_personas || 1,
-    observaciones: "",
+    observaciones: reservaInicial?.observaciones || "",
   };
 }
 
 function ReservaModal({
   mesa,
   zona,
+  configuracion = RESERVA_CONFIG_DEFAULT,
   reservaInicial,
   onCerrar,
   onVolver,
   onContinuar,
 }) {
   const fechaActual = obtenerFechaActual();
+
+  const duracionMinutos = Number(
+    configuracion?.duracion_reserva_minutos ||
+      RESERVA_CONFIG_DEFAULT.duracion_reserva_minutos,
+  );
+
+  const intervaloMinutos = Number(
+    configuracion?.intervalo_horarios_minutos ||
+      RESERVA_CONFIG_DEFAULT.intervalo_horarios_minutos,
+  );
 
   const [formData, setFormData] = useState(() =>
     crearEstadoInicialFormulario(reservaInicial, fechaActual),
@@ -78,9 +95,9 @@ function ReservaModal({
 
     if (
       formData.hora &&
-      !horaRespetaIntervalo(formData.hora, INTERVALO_HORARIOS_MINUTOS)
+      !horaRespetaIntervalo(formData.hora, intervaloMinutos)
     ) {
-      nuevosErrores.hora = `Selecciona una hora en intervalos de ${INTERVALO_HORARIOS_MINUTOS} minutos.`;
+      nuevosErrores.hora = `Selecciona una hora en intervalos de ${intervaloMinutos} minutos.`;
     }
 
     if (!cantidadPersonas || cantidadPersonas < 1) {
@@ -102,6 +119,9 @@ function ReservaModal({
 
     if (Object.keys(nuevosErrores).length > 0) return;
 
+    const horaNormalizada = normalizarHora(formData.hora);
+    const horaFin = calcularHoraFin(horaNormalizada, duracionMinutos);
+
     const reservaBorrador = {
       mesa,
       zona,
@@ -110,8 +130,12 @@ function ReservaModal({
       cliente_tel: formData.telefono.trim(),
       cliente_email: formData.correo.trim(),
       fecha: formData.fecha,
-      hora: formData.hora,
+      hora: horaNormalizada,
+      hora_fin: horaFin,
+      duracion_minutos: duracionMinutos,
       num_personas: Number(formData.personas),
+      observaciones: formData.observaciones.trim(),
+      estado: "activa",
     };
 
     onContinuar(reservaBorrador);
@@ -161,8 +185,8 @@ function ReservaModal({
             </div>
 
             <div className="reserva-modal__dato">
-              <p>Estado</p>
-              <strong>{mesa.estado}</strong>
+              <p>Duración</p>
+              <strong>{obtenerTextoDuracionReserva(duracionMinutos)}</strong>
             </div>
           </aside>
 
@@ -226,7 +250,7 @@ function ReservaModal({
                   id="hora"
                   name="hora"
                   type="time"
-                  step={INTERVALO_HORARIOS_MINUTOS * 60}
+                  step={intervaloMinutos * 60}
                   value={formData.hora}
                   onChange={handleChange}
                 />
@@ -235,7 +259,7 @@ function ReservaModal({
                 {!errores.hora && (
                   <small className="reserva-modal__ayuda">
                     Cada reserva bloquea la mesa por{" "}
-                    {obtenerTextoDuracionReserva()}.
+                    {obtenerTextoDuracionReserva(duracionMinutos)}.
                   </small>
                 )}
               </div>

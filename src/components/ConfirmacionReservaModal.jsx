@@ -13,7 +13,10 @@ function crearPayloadReserva(reserva) {
     cliente_email: reserva.cliente_email || null,
     fecha: reserva.fecha,
     hora: reserva.hora,
+    hora_fin: reserva.hora_fin,
+    duracion_minutos: reserva.duracion_minutos,
     num_personas: reserva.num_personas,
+    observaciones: reserva.observaciones || null,
     estado: "activa",
   };
 }
@@ -44,6 +47,7 @@ function ConfirmacionReservaModal({
           reserva.mesa_id,
           reserva.fecha,
           reserva.hora,
+          reserva.duracion_minutos,
         );
 
         if (!componenteActivo) return;
@@ -208,6 +212,9 @@ function ConfirmacionReservaModal({
           <section className="confirmacion-modal__card">
             <span>Cliente</span>
             <h3>{reserva.cliente_nombre}</h3>
+            <strong>{reserva.cliente_tel}</strong>
+            <strong>{reserva.cliente_email || "No registrado"}</strong>
+            <strong>{reserva.num_personas}</strong>
 
             <div className="confirmacion-modal__dato">
               <p>Teléfono</p>
@@ -225,7 +232,9 @@ function ConfirmacionReservaModal({
 
             <div className="confirmacion-modal__fecha">
               <strong>{reserva.fecha}</strong>
-              <strong>{reserva.hora}</strong>
+              <strong>
+                {reserva.hora} - {reserva.hora_fin}
+              </strong>
             </div>
 
             {reserva.observaciones && (
