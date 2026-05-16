@@ -10,18 +10,31 @@ function obtenerFechaActual() {
   return new Date().toISOString().split("T")[0];
 }
 
-function ReservaModal({ mesa, zona, onCerrar, onVolver, onContinuar }) {
+function crearEstadoInicialFormulario(reservaInicial, fechaActual) {
+  return {
+    nombre: reservaInicial?.cliente_nombre || "",
+    telefono: reservaInicial?.cliente_tel || "",
+    correo: reservaInicial?.cliente_email || "",
+    fecha: reservaInicial?.fecha || fechaActual,
+    hora: reservaInicial?.hora || "19:00",
+    personas: reservaInicial?.num_personas || 1,
+    observaciones: "",
+  };
+}
+
+function ReservaModal({
+  mesa,
+  zona,
+  reservaInicial,
+  onCerrar,
+  onVolver,
+  onContinuar,
+}) {
   const fechaActual = obtenerFechaActual();
 
-  const [formData, setFormData] = useState({
-    nombre: "",
-    telefono: "",
-    correo: "",
-    fecha: fechaActual,
-    hora: "19:00",
-    personas: 1,
-    observaciones: "",
-  });
+  const [formData, setFormData] = useState(() =>
+    crearEstadoInicialFormulario(reservaInicial, fechaActual),
+  );
 
   const [errores, setErrores] = useState({});
 

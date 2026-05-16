@@ -106,6 +106,7 @@ function SalonView() {
         <ReservaModal
           mesa={mesaSeleccionada}
           zona={zonaSeleccionada}
+          reservaInicial={reservaBorrador}
           onCerrar={cerrarFormularioReserva}
           onVolver={cerrarFormularioReserva}
           onContinuar={continuarReserva}
