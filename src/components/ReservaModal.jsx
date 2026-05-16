@@ -81,13 +81,12 @@ function ReservaModal({ mesa, zona, onCerrar, onVolver, onContinuar }) {
       mesa,
       zona,
       mesa_id: mesa.id,
-      nombre_cliente: formData.nombre.trim(),
-      telefono_cliente: formData.telefono.trim(),
-      correo_cliente: formData.correo.trim(),
+      cliente_nombre: formData.nombre.trim(),
+      cliente_tel: formData.telefono.trim(),
+      cliente_email: formData.correo.trim(),
       fecha: formData.fecha,
       hora: formData.hora,
-      personas: Number(formData.personas),
-      observaciones: formData.observaciones.trim(),
+      num_personas: Number(formData.personas),
     };
 
     onContinuar(reservaBorrador);

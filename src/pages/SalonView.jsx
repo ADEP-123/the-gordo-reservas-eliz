@@ -4,6 +4,7 @@ import Leyenda from "../components/Leyenda";
 import SalonMap from "../components/SalonMap";
 import ZonaModal from "../components/ZonaModal";
 import ReservaModal from "../components/ReservaModal";
+import ConfirmacionReservaModal from "../components/ConfirmacionReservaModal";
 import useMesas from "../hooks/useMesas";
 import "../styles/salonView.css";
 
@@ -12,22 +13,30 @@ function SalonView() {
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [formularioReservaAbierto, setFormularioReservaAbierto] =
     useState(false);
+  const [confirmacionReservaAbierta, setConfirmacionReservaAbierta] =
+    useState(false);
   const [reservaBorrador, setReservaBorrador] = useState(null);
 
-  const { mesas, cargando, error } = useMesas();
+  const { mesas, cargando, error, recargarMesas } = useMesas();
 
   const seleccionarZona = zona => {
     setZonaSeleccionada(zona);
     setMesaSeleccionada(null);
     setFormularioReservaAbierto(false);
+    setConfirmacionReservaAbierta(false);
     setReservaBorrador(null);
   };
 
-  const cerrarZonaModal = () => {
+  const cerrarFlujoReserva = () => {
     setZonaSeleccionada(null);
     setMesaSeleccionada(null);
     setFormularioReservaAbierto(false);
+    setConfirmacionReservaAbierta(false);
     setReservaBorrador(null);
+  };
+
+  const cerrarFormularioReserva = () => {
+    setFormularioReservaAbierto(false);
   };
 
   const abrirFormularioReserva = () => {
@@ -35,19 +44,20 @@ function SalonView() {
     setFormularioReservaAbierto(true);
   };
 
-  const cerrarFormularioReserva = () => {
-    setFormularioReservaAbierto(false);
-  };
-
   const continuarReserva = reserva => {
     setReservaBorrador(reserva);
     setFormularioReservaAbierto(false);
+    setConfirmacionReservaAbierta(true);
+  };
 
-    console.log("Reserva lista para confirmar:", reserva);
+  const volverAlFormulario = () => {
+    setConfirmacionReservaAbierta(false);
+    setFormularioReservaAbierto(true);
+  };
 
-    alert(
-      `Datos registrados para la Mesa ${reserva.mesa.numero}. El siguiente paso será confirmar disponibilidad.`,
-    );
+  const finalizarReservaCreada = () => {
+    cerrarFlujoReserva();
+    recargarMesas();
   };
 
   return (
@@ -87,7 +97,7 @@ function SalonView() {
           zona={zonaSeleccionada}
           mesaSeleccionada={mesaSeleccionada}
           onSeleccionarMesa={setMesaSeleccionada}
-          onCerrar={cerrarZonaModal}
+          onCerrar={cerrarFlujoReserva}
           onReservar={abrirFormularioReserva}
         />
       )}
@@ -99,6 +109,15 @@ function SalonView() {
           onCerrar={cerrarFormularioReserva}
           onVolver={cerrarFormularioReserva}
           onContinuar={continuarReserva}
+        />
+      )}
+
+      {confirmacionReservaAbierta && reservaBorrador && (
+        <ConfirmacionReservaModal
+          reserva={reservaBorrador}
+          onCerrar={() => setConfirmacionReservaAbierta(false)}
+          onVolver={volverAlFormulario}
+          onReservaCreada={finalizarReservaCreada}
         />
       )}
 
