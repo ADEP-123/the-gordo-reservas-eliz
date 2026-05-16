@@ -8,9 +8,6 @@ function Leyenda() {
         <span className="leyenda-item">🔴 Ocupada</span>
         <span className="leyenda-item">⚫ Bloqueada</span>
       </div>
-      <p className="leyenda-hint">
-        Haz clic en una mesa disponible para reservar
-      </p>
     </div>
   );
 }

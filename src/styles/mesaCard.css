@@ -1,7 +1,8 @@
 .mesa-card {
   position: relative;
   width: 190px;
-  min-height: 185px;
+  min-height: 205px;
+  box-sizing: border-box;
   padding: 1rem;
   border: 1px solid rgba(70, 212, 131, 0.2);
   border-radius: 20px;
@@ -194,19 +195,22 @@
     0 0 30px rgba(249, 87, 42, 0.34);
 }
 
-.mesa-card--seleccionada::after {
-  content: "Seleccionada";
-  position: absolute;
-  left: 50%;
-  bottom: -0.78rem;
-  transform: translateX(-50%);
-  padding: 0.32rem 0.75rem;
+.mesa-card__seleccion-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: fit-content;
+  margin: 0.75rem auto 0;
+  padding: 0.34rem 0.8rem;
   border-radius: 999px;
   color: #1a0f0c;
   background: linear-gradient(90deg, #ffc905, #ff9b05);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   font-weight: 900;
+  line-height: 1;
   white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(255, 155, 5, 0.22);
 }
 
 /* Ilustración dinámica de mesa */

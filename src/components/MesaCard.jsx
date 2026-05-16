@@ -59,6 +59,10 @@ function MesaCard({ mesa, seleccionada = false, onSeleccionar }) {
           {mesa.capacidad} personas
         </span>
       </div>
+
+      {seleccionada && (
+        <span className="mesa-card__seleccion-tag">Seleccionada</span>
+      )}
     </button>
   );
 }
