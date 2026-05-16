@@ -1,25 +1,14 @@
 import "../styles/mesaCard.css";
 import MesaVisual from "./MesaVisual";
-
-function normalizarEstado(estado) {
-  return estado?.toLowerCase() || "disponible";
-}
-
-function obtenerTextoEstado(estado) {
-  const estadoNormalizado = normalizarEstado(estado);
-
-  const textos = {
-    disponible: "Disponible",
-    ocupada: "Ocupada",
-    bloqueada: "Bloqueada",
-  };
-
-  return textos[estadoNormalizado] || estado;
-}
+import {
+  estaMesaDisponible,
+  normalizarEstadoMesa,
+  obtenerTextoEstadoMesa,
+} from "../utils/mesaUtils";
 
 function MesaCard({ mesa, seleccionada = false, onSeleccionar }) {
-  const estado = normalizarEstado(mesa.estado);
-  const estaDisponible = estado === "disponible";
+  const estado = normalizarEstadoMesa(mesa.estado);
+  const estaDisponible = estaMesaDisponible(mesa);
 
   const handleClick = () => {
     if (!estaDisponible) return;
@@ -40,7 +29,7 @@ function MesaCard({ mesa, seleccionada = false, onSeleccionar }) {
 
         <span className="mesa-card__badge">
           <span className="mesa-card__estado-punto"></span>
-          {obtenerTextoEstado(mesa.estado)}
+          {obtenerTextoEstadoMesa(mesa.estado)}
         </span>
       </div>
 
