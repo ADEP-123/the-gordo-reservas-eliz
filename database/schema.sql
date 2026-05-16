@@ -335,3 +335,13 @@ insert into public.reservas (
 
 -- Recargar caché de esquema
 notify pgrst, 'reload schema';
+
+alter table public.configuracion_reservas
+add column if not exists ocupacion_minima_porcentaje integer not null default 75
+check (ocupacion_minima_porcentaje > 0 and ocupacion_minima_porcentaje <= 100);
+
+update public.configuracion_reservas
+set ocupacion_minima_porcentaje = 75
+where nombre = 'global';
+
+notify pgrst, 'reload schema';
