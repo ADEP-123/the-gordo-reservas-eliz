@@ -4,6 +4,8 @@ import { getConfiguracionReservas } from "./configuracionReservasService";
 import {
   calcularHoraFin,
   calcularMinimoPersonasMesa,
+  convertirHoraAMinutos,
+  convertirMinutosAHora,
   existeCruceDeReservas,
   mesaCumpleOcupacionMinima,
   normalizarHora,
@@ -281,4 +283,97 @@ export const cancelarReserva = async id => {
   }
 
   return data;
+};
+
+const DIAS_SEMANA = [
+  "domingo",
+  "lunes",
+  "martes",
+  "miercoles",
+  "jueves",
+  "viernes",
+  "sabado",
+];
+
+function obtenerDiaSemana(fecha) {
+  const [year, month, day] = fecha.split("-").map(Number);
+  const fechaLocal = new Date(year, month - 1, day);
+
+  return DIAS_SEMANA[fechaLocal.getDay()];
+}
+
+function redondearAlSiguienteIntervalo(minutos, intervalo) {
+  return Math.ceil(minutos / intervalo) * intervalo;
+}
+
+async function getHorarioActivoPorFecha(fecha) {
+  const diaSemana = obtenerDiaSemana(fecha);
+
+  const { data, error } = await supabase
+    .from("horarios")
+    .select("*")
+    .eq("dia_semana", diaSemana)
+    .eq("activo", true)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error al obtener horario activo:", error);
+    return null;
+  }
+
+  return data;
+}
+
+export const buscarSiguienteHorarioDisponible = async ({
+  fecha,
+  hora,
+  num_personas,
+}) => {
+  const configuracion = await getConfiguracionReservas();
+  const horario = await getHorarioActivoPorFecha(fecha);
+
+  if (!horario) return null;
+
+  const intervaloMinutos = Number(configuracion.intervalo_horarios_minutos);
+  const duracionMinutos = Number(configuracion.duracion_reserva_minutos);
+
+  const aperturaMinutos = convertirHoraAMinutos(horario.hora_inicio);
+  const cierreMinutos = convertirHoraAMinutos(horario.hora_fin);
+
+  let minutoActual = convertirHoraAMinutos(hora) + intervaloMinutos;
+
+  minutoActual = Math.max(minutoActual, aperturaMinutos);
+  minutoActual = redondearAlSiguienteIntervalo(minutoActual, intervaloMinutos);
+
+  while (minutoActual + duracionMinutos <= cierreMinutos) {
+    const horaSugerida = convertirMinutosAHora(minutoActual);
+
+    const mesasCalculadas = await getMesasConDisponibilidad({
+      fecha,
+      hora: horaSugerida,
+      num_personas,
+    });
+
+    const mesasDisponibles = mesasCalculadas.filter(
+      mesa => mesa.disponible_para_criterio,
+    );
+
+    if (mesasDisponibles.length > 0) {
+      return {
+        fecha,
+        hora: horaSugerida,
+        hora_fin: calcularHoraFin(horaSugerida, duracionMinutos),
+        num_personas: Number(num_personas),
+        mesas_disponibles: mesasDisponibles.length,
+        asientos_disponibles: mesasDisponibles.reduce(
+          (total, mesa) => total + Number(mesa.capacidad || 0),
+          0,
+        ),
+      };
+    }
+
+    minutoActual += intervaloMinutos;
+  }
+
+  return null;
 };

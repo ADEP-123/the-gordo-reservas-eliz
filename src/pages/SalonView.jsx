@@ -6,6 +6,7 @@ import ZonaModal from "../components/ZonaModal";
 import ReservaModal from "../components/ReservaModal";
 import ConfirmacionReservaModal from "../components/ConfirmacionReservaModal";
 import BusquedaDisponibilidad from "../components/BusquedaDisponibilidad";
+import SugerenciaDisponibilidadModal from "../components/SugerenciaDisponibilidadModal";
 import useMesas from "../hooks/useMesas";
 import useConfiguracionReservas from "../hooks/useConfiguracionReservas";
 import useBusquedaDisponibilidad from "../hooks/useBusquedaDisponibilidad";
@@ -30,8 +31,11 @@ function SalonView() {
     criteriosBusqueda,
     buscandoDisponibilidad,
     errorBusqueda,
+    sinDisponibilidad,
+    sugerenciaDisponibilidad,
     buscarDisponibilidad,
     limpiarBusqueda,
+    cerrarSugerenciaDisponibilidad,
   } = useBusquedaDisponibilidad();
 
   const hayBusquedaActiva = Boolean(criteriosBusqueda);
@@ -94,6 +98,19 @@ function SalonView() {
       hora: criteriosBusqueda.hora,
       num_personas: criteriosBusqueda.personas,
     };
+  };
+
+  const aceptarSugerenciaDisponibilidad = sugerencia => {
+    if (!criteriosBusqueda || !sugerencia) return;
+
+    cerrarFlujoReserva();
+    cerrarSugerenciaDisponibilidad();
+
+    buscarDisponibilidad({
+      fecha: sugerencia.fecha,
+      hora: sugerencia.hora,
+      personas: criteriosBusqueda.personas,
+    });
   };
 
   const estaCargando = cargando || cargandoConfiguracion;
@@ -174,6 +191,15 @@ function SalonView() {
           onCerrar={() => setConfirmacionReservaAbierta(false)}
           onVolver={volverAlFormulario}
           onReservaCreada={finalizarReservaCreada}
+        />
+      )}
+
+      {sinDisponibilidad && criteriosBusqueda && (
+        <SugerenciaDisponibilidadModal
+          criterios={criteriosBusqueda}
+          sugerencia={sugerenciaDisponibilidad}
+          onAceptar={aceptarSugerenciaDisponibilidad}
+          onCerrar={cerrarSugerenciaDisponibilidad}
         />
       )}
 

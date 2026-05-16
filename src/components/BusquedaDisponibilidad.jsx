@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RESERVA_CONFIG_DEFAULT } from "../data/reservaConfig";
 import { horaRespetaIntervalo, normalizarHora } from "../utils/reservaUtils";
 import "../styles/busquedaDisponibilidad.css";
@@ -41,6 +41,16 @@ function BusquedaDisponibilidad({
     hora: "19:00",
     personas: 2,
   });
+
+  useEffect(() => {
+    if (!criteriosActivos) return;
+
+    setFormData({
+      fecha: criteriosActivos.fecha,
+      hora: criteriosActivos.hora,
+      personas: criteriosActivos.personas,
+    });
+  }, [criteriosActivos]);
 
   const [errores, setErrores] = useState({});
 
