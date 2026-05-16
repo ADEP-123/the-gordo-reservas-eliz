@@ -1,2 +1,4 @@
-export const DURACION_RESERVA_MINUTOS = 60;
-export const INTERVALO_HORARIOS_MINUTOS = 30;
+export const RESERVA_CONFIG_DEFAULT = {
+  duracion_reserva_minutos: 60,
+  intervalo_horarios_minutos: 30,
+};

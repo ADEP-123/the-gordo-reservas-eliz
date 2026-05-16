@@ -1,4 +1,4 @@
-import { DURACION_RESERVA_MINUTOS } from "../data/reservaConfig";
+import { RESERVA_CONFIG_DEFAULT } from "../data/reservaConfig";
 
 export function normalizarHora(hora = "") {
   const [horas = "00", minutos = "00"] = hora.toString().split(":");
@@ -13,52 +13,55 @@ export function convertirHoraAMinutos(hora) {
   return horas * 60 + minutos;
 }
 
-export function obtenerRangoReserva(
-  hora,
-  duracionMinutos = DURACION_RESERVA_MINUTOS,
-) {
-  const inicio = convertirHoraAMinutos(hora);
+export function convertirMinutosAHora(totalMinutos) {
+  const horas = Math.floor(totalMinutos / 60);
+  const minutos = totalMinutos % 60;
 
+  return `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
+}
+
+export function calcularHoraFin(
+  horaInicio,
+  duracionMinutos = RESERVA_CONFIG_DEFAULT.duracion_reserva_minutos,
+) {
+  const inicioMinutos = convertirHoraAMinutos(horaInicio);
+  const finMinutos = inicioMinutos + Number(duracionMinutos);
+
+  return convertirMinutosAHora(finMinutos);
+}
+
+export function obtenerRangoReservaPorHoras(horaInicio, horaFin) {
   return {
-    inicio,
-    fin: inicio + duracionMinutos,
+    inicio: convertirHoraAMinutos(horaInicio),
+    fin: convertirHoraAMinutos(horaFin),
   };
 }
 
-export function reservasSeCruzan(
-  horaReservaExistente,
-  horaNuevaReserva,
-  duracionMinutos = DURACION_RESERVA_MINUTOS,
-) {
-  const reservaExistente = obtenerRangoReserva(
-    horaReservaExistente,
-    duracionMinutos,
-  );
-
-  const nuevaReserva = obtenerRangoReserva(horaNuevaReserva, duracionMinutos);
-
+export function rangosSeCruzan(rangoExistente, rangoNuevo) {
   return (
-    reservaExistente.inicio < nuevaReserva.fin &&
-    nuevaReserva.inicio < reservaExistente.fin
+    rangoExistente.inicio < rangoNuevo.fin &&
+    rangoNuevo.inicio < rangoExistente.fin
   );
 }
 
-export function existeCruceDeReservas(
-  reservas = [],
-  horaNuevaReserva,
-  duracionMinutos = DURACION_RESERVA_MINUTOS,
-) {
-  return reservas.some(reserva =>
-    reservasSeCruzan(reserva.hora, horaNuevaReserva, duracionMinutos),
+export function reservasSeCruzan(reservaExistente, nuevaReserva) {
+  const rangoExistente = obtenerRangoReservaPorHoras(
+    reservaExistente.hora,
+    reservaExistente.hora_fin,
   );
+
+  const rangoNuevo = obtenerRangoReservaPorHoras(
+    nuevaReserva.hora,
+    nuevaReserva.hora_fin,
+  );
+
+  return rangosSeCruzan(rangoExistente, rangoNuevo);
+}
+
+export function existeCruceDeReservas(reservas = [], nuevaReserva) {
+  return reservas.some(reserva => reservasSeCruzan(reserva, nuevaReserva));
 }
 
 export function horaRespetaIntervalo(hora, intervaloMinutos) {
-  return convertirHoraAMinutos(hora) % intervaloMinutos === 0;
-}
-
-export function obtenerTextoDuracionReserva() {
-  if (DURACION_RESERVA_MINUTOS === 60) return "1 hora";
-
-  return `${DURACION_RESERVA_MINUTOS} minutos`;
+  return convertirHoraAMinutos(hora) % Number(intervaloMinutos) === 0;
 }
