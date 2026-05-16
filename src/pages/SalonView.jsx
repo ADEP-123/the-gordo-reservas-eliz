@@ -5,14 +5,13 @@ import SalonMap from "../components/SalonMap";
 import ZonaModal from "../components/ZonaModal";
 import ReservaModal from "../components/ReservaModal";
 import ConfirmacionReservaModal from "../components/ConfirmacionReservaModal";
+import BusquedaDisponibilidad from "../components/BusquedaDisponibilidad";
 import useMesas from "../hooks/useMesas";
 import useConfiguracionReservas from "../hooks/useConfiguracionReservas";
+import useBusquedaDisponibilidad from "../hooks/useBusquedaDisponibilidad";
 import "../styles/salonView.css";
 
 function SalonView() {
-  const { configuracion, cargandoConfiguracion, errorConfiguracion } =
-    useConfiguracionReservas();
-
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [formularioReservaAbierto, setFormularioReservaAbierto] =
@@ -22,6 +21,21 @@ function SalonView() {
   const [reservaBorrador, setReservaBorrador] = useState(null);
 
   const { mesas, cargando, error, recargarMesas } = useMesas();
+
+  const { configuracion, cargandoConfiguracion, errorConfiguracion } =
+    useConfiguracionReservas();
+
+  const {
+    mesasFiltradas,
+    criteriosBusqueda,
+    buscandoDisponibilidad,
+    errorBusqueda,
+    buscarDisponibilidad,
+    limpiarBusqueda,
+  } = useBusquedaDisponibilidad();
+
+  const hayBusquedaActiva = Boolean(criteriosBusqueda);
+  const mesasParaMapa = mesasFiltradas || mesas;
 
   const seleccionarZona = zona => {
     setZonaSeleccionada(zona);
@@ -61,8 +75,29 @@ function SalonView() {
 
   const finalizarReservaCreada = () => {
     cerrarFlujoReserva();
+    limpiarBusqueda();
     recargarMesas();
   };
+
+  const limpiarBusquedaCompleta = () => {
+    limpiarBusqueda();
+    cerrarFlujoReserva();
+  };
+
+  const obtenerReservaInicial = () => {
+    if (reservaBorrador) return reservaBorrador;
+
+    if (!criteriosBusqueda) return null;
+
+    return {
+      fecha: criteriosBusqueda.fecha,
+      hora: criteriosBusqueda.hora,
+      num_personas: criteriosBusqueda.personas,
+    };
+  };
+
+  const estaCargando = cargando || cargandoConfiguracion;
+  const mensajeError = error || errorConfiguracion;
 
   return (
     <div className="salon-view">
@@ -72,28 +107,43 @@ function SalonView() {
         <h2>
           Reserva tu <span>Mesa</span>
         </h2>
-        <p>Explora el salón, elige una zona y selecciona tu mesa ideal</p>
+        <p>Busca disponibilidad, elige una zona y confirma tu reserva</p>
       </header>
 
-      <Leyenda />
-
-      {(cargando || cargandoConfiguracion) && (
+      {estaCargando && (
         <div className="salon-view__loading">⏳ Cargando salón...</div>
       )}
 
-      {!cargando && !cargandoConfiguracion && (error || errorConfiguracion) && (
+      {!estaCargando && mensajeError && (
         <div className="salon-view__error">
           <strong>Ocurrió un problema</strong>
-          <p>{error || errorConfiguracion}</p>
+          <p>{mensajeError}</p>
         </div>
       )}
 
-      {!cargando && !cargandoConfiguracion && !error && !errorConfiguracion && (
-        <SalonMap
-          mesas={mesas}
-          zonaActivaId={zonaSeleccionada?.id}
-          onSeleccionarZona={seleccionarZona}
-        />
+      {!estaCargando && !mensajeError && (
+        <>
+          <BusquedaDisponibilidad
+            configuracion={configuracion}
+            buscando={buscandoDisponibilidad}
+            criteriosActivos={criteriosBusqueda}
+            error={errorBusqueda}
+            onBuscar={buscarDisponibilidad}
+            onLimpiar={limpiarBusquedaCompleta}
+          />
+
+          {hayBusquedaActiva && (
+            <>
+              <Leyenda />
+
+              <SalonMap
+                mesas={mesasParaMapa}
+                zonaActivaId={zonaSeleccionada?.id}
+                onSeleccionarZona={seleccionarZona}
+              />
+            </>
+          )}
+        </>
       )}
 
       {zonaSeleccionada && (
@@ -111,7 +161,7 @@ function SalonView() {
           mesa={mesaSeleccionada}
           zona={zonaSeleccionada}
           configuracion={configuracion}
-          reservaInicial={reservaBorrador}
+          reservaInicial={obtenerReservaInicial()}
           onCerrar={cerrarFormularioReserva}
           onVolver={cerrarFormularioReserva}
           onContinuar={continuarReserva}
