@@ -1,0 +1,204 @@
+.busqueda-disponibilidad {
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto 1.7rem;
+  padding: 1.15rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 155, 5, 0.16);
+  color: #fff4e8;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(249, 87, 42, 0.12),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.busqueda-disponibilidad__intro {
+  margin-bottom: 1rem;
+}
+
+.busqueda-disponibilidad__intro span {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  color: #ff9b05;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.busqueda-disponibilidad__intro h2 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 900;
+}
+
+.busqueda-disponibilidad__intro p {
+  max-width: 760px;
+  margin: 0.55rem 0 0;
+  color: #c8a98d;
+  line-height: 1.5;
+}
+
+.busqueda-disponibilidad__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.busqueda-disponibilidad__grupo {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.busqueda-disponibilidad__grupo label {
+  color: #fff4e8;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.busqueda-disponibilidad__grupo input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.78rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #fff4e8;
+  background: rgba(0, 0, 0, 0.22);
+  font-family: inherit;
+  outline: none;
+}
+
+.busqueda-disponibilidad__grupo input:focus {
+  border-color: rgba(255, 155, 5, 0.82);
+  box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.busqueda-disponibilidad__grupo small {
+  color: #ff8c72;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.busqueda-disponibilidad__acciones {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.busqueda-disponibilidad__btn {
+  min-height: 44px;
+  border: none;
+  border-radius: 13px;
+  padding: 0.75rem 1rem;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.busqueda-disponibilidad__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.busqueda-disponibilidad__btn--principal {
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+}
+
+.busqueda-disponibilidad__btn--secundario {
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.busqueda-disponibilidad__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  color: #c8a98d;
+  font-size: 0.82rem;
+}
+
+.busqueda-disponibilidad__meta strong {
+  color: #ffc905;
+}
+
+.busqueda-disponibilidad__resultado {
+  margin-top: 0.9rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  color: #d8c3ad;
+  background: rgba(70, 212, 131, 0.08);
+  border: 1px solid rgba(70, 212, 131, 0.16);
+  font-size: 0.9rem;
+}
+
+.busqueda-disponibilidad__resultado strong {
+  color: #46d483;
+}
+
+.busqueda-disponibilidad__error {
+  margin-top: 0.9rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.1);
+  border: 1px solid rgba(255, 78, 106, 0.16);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.busqueda-disponibilidad--inicial {
+  margin-top: 1.5rem;
+  padding: 1.45rem;
+}
+
+.busqueda-disponibilidad--inicial .busqueda-disponibilidad__intro {
+  text-align: center;
+}
+
+.busqueda-disponibilidad--inicial .busqueda-disponibilidad__intro p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.busqueda-disponibilidad--inicial .busqueda-disponibilidad__form {
+  max-width: 920px;
+  margin: 1.2rem auto 0;
+}
+
+.busqueda-disponibilidad--inicial .busqueda-disponibilidad__meta {
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .busqueda-disponibilidad__form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .busqueda-disponibilidad__acciones {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .busqueda-disponibilidad {
+    width: calc(100% - 2rem);
+  }
+
+  .busqueda-disponibilidad__form {
+    grid-template-columns: 1fr;
+  }
+
+  .busqueda-disponibilidad__acciones {
+    flex-direction: column;
+  }
+
+  .busqueda-disponibilidad__btn {
+    width: 100%;
+  }
+}

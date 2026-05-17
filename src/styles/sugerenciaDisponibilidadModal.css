@@ -1,0 +1,174 @@
+.sugerencia-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.sugerencia-modal {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 1.6rem;
+  border-radius: 26px;
+  color: #fff4e8;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(249, 87, 42, 0.16),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 201, 5, 0.1),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #21120e, #100705);
+  border: 1px solid rgba(255, 155, 5, 0.24);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58);
+}
+
+.sugerencia-modal__cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: none;
+  border-radius: 50%;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sugerencia-modal__cerrar:hover {
+  background: rgba(249, 87, 42, 0.82);
+}
+
+.sugerencia-modal__label {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #ff9b05;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.sugerencia-modal h2 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.sugerencia-modal > p {
+  margin: 0.8rem 0 1.2rem;
+  color: #c8a98d;
+  line-height: 1.55;
+}
+
+.sugerencia-modal p strong {
+  color: #fff4e8;
+}
+
+.sugerencia-modal__card {
+  padding: 1rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 5, 0.12),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 201, 5, 0.16);
+}
+
+.sugerencia-modal__card span {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ff9b05;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.sugerencia-modal__card strong {
+  display: inline-block;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.sugerencia-modal__card p {
+  margin: 0.8rem 0 0;
+  color: #d8c3ad;
+  line-height: 1.5;
+}
+
+.sugerencia-modal__card--empty {
+  border-color: rgba(255, 78, 106, 0.18);
+  background: rgba(255, 78, 106, 0.08);
+}
+
+.sugerencia-modal__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+}
+
+.sugerencia-modal__btn {
+  border: none;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.sugerencia-modal__btn--secundario {
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sugerencia-modal__btn--secundario:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sugerencia-modal__btn--principal {
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+}
+
+.sugerencia-modal__btn--principal:hover {
+  box-shadow: 0 14px 26px rgba(255, 155, 5, 0.22);
+}
+
+@media (max-width: 560px) {
+  .sugerencia-modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .sugerencia-modal {
+    padding: 1.2rem;
+  }
+
+  .sugerencia-modal__acciones {
+    flex-direction: column-reverse;
+  }
+
+  .sugerencia-modal__btn {
+    width: 100%;
+  }
+}
