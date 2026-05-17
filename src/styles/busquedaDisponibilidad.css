@@ -61,7 +61,8 @@
   font-weight: 800;
 }
 
-.busqueda-disponibilidad__grupo input {
+.busqueda-disponibilidad__grupo input,
+.busqueda-disponibilidad__grupo select {
   width: 100%;
   box-sizing: border-box;
   padding: 0.78rem 0.85rem;
@@ -73,9 +74,14 @@
   outline: none;
 }
 
-.busqueda-disponibilidad__grupo input:focus {
+.busqueda-disponibilidad__grupo input:focus,
+.busqueda-disponibilidad__grupo select:focus {
   border-color: rgba(255, 155, 5, 0.82);
   box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.busqueda-disponibilidad__grupo select {
+  appearance: none;
 }
 
 .busqueda-disponibilidad__grupo small {

@@ -164,6 +164,7 @@
 }
 
 .reserva-modal__grupo input,
+.reserva-modal__grupo select,
 .reserva-modal__grupo textarea {
   width: 100%;
   box-sizing: border-box;
@@ -177,9 +178,14 @@
 }
 
 .reserva-modal__grupo input:focus,
+.reserva-modal__grupo select:focus,
 .reserva-modal__grupo textarea:focus {
   border-color: rgba(255, 155, 5, 0.82);
   box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.reserva-modal__grupo select {
+  appearance: none;
 }
 
 .reserva-modal__grupo small {

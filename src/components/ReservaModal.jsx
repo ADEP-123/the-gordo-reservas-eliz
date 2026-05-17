@@ -1,10 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RESERVA_CONFIG_DEFAULT } from "../data/reservaConfig";
-import {
-  calcularHoraFin,
-  horaRespetaIntervalo,
-  normalizarHora,
-} from "../utils/reservaUtils";
+import { calcularHoraFin, normalizarHora } from "../utils/reservaUtils";
+import useOpcionesHorario from "../hooks/useOpcionesHorario";
 import "../styles/reservaModal.css";
 
 function obtenerFechaActual() {
@@ -55,6 +52,28 @@ function ReservaModal({
 
   const [errores, setErrores] = useState({});
 
+  const { horario, opcionesHorario, cargandoHorarios, errorHorarios } =
+    useOpcionesHorario(formData.fecha, configuracion);
+
+  useEffect(() => {
+    if (cargandoHorarios) return;
+
+    if (opcionesHorario.length === 0) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        hora: "",
+      }));
+      return;
+    }
+
+    if (!opcionesHorario.includes(formData.hora)) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        hora: opcionesHorario[0],
+      }));
+    }
+  }, [opcionesHorario, cargandoHorarios, formData.hora]);
+
   if (!mesa) return null;
 
   const handleChange = event => {
@@ -69,6 +88,7 @@ function ReservaModal({
   const validarFormulario = () => {
     const nuevosErrores = {};
     const cantidadPersonas = Number(formData.personas);
+    const horaNormalizada = normalizarHora(formData.hora);
 
     if (!formData.nombre.trim()) {
       nuevosErrores.nombre = "El nombre del cliente es obligatorio.";
@@ -89,15 +109,20 @@ function ReservaModal({
       nuevosErrores.fecha = "Selecciona una fecha.";
     }
 
+    if (!horario || opcionesHorario.length === 0) {
+      nuevosErrores.hora = "No hay horarios habilitados para esta fecha.";
+    }
+
     if (!formData.hora) {
       nuevosErrores.hora = "Selecciona una hora.";
     }
 
     if (
       formData.hora &&
-      !horaRespetaIntervalo(formData.hora, intervaloMinutos)
+      opcionesHorario.length > 0 &&
+      !opcionesHorario.includes(horaNormalizada)
     ) {
-      nuevosErrores.hora = `Selecciona una hora en intervalos de ${intervaloMinutos} minutos.`;
+      nuevosErrores.hora = "Selecciona un horario habilitado.";
     }
 
     if (!cantidadPersonas || cantidadPersonas < 1) {
@@ -188,6 +213,15 @@ function ReservaModal({
               <p>Duración</p>
               <strong>{obtenerTextoDuracionReserva(duracionMinutos)}</strong>
             </div>
+
+            {horario && (
+              <div className="reserva-modal__dato">
+                <p>Horario del día</p>
+                <strong>
+                  {horario.hora_inicio} - {horario.hora_fin}
+                </strong>
+              </div>
+            )}
           </aside>
 
           <form className="reserva-modal__form" onSubmit={handleSubmit}>
@@ -246,17 +280,36 @@ function ReservaModal({
 
               <div className="reserva-modal__grupo">
                 <label htmlFor="hora">Hora</label>
-                <input
+                <select
                   id="hora"
                   name="hora"
-                  type="time"
-                  step={intervaloMinutos * 60}
                   value={formData.hora}
                   onChange={handleChange}
-                />
+                  disabled={cargandoHorarios || opcionesHorario.length === 0}
+                >
+                  {cargandoHorarios && (
+                    <option value="">Cargando horarios...</option>
+                  )}
+
+                  {!cargandoHorarios && opcionesHorario.length === 0 && (
+                    <option value="">Sin horarios disponibles</option>
+                  )}
+
+                  {!cargandoHorarios &&
+                    opcionesHorario.map(hora => (
+                      <option key={hora} value={hora}>
+                        {hora}
+                      </option>
+                    ))}
+                </select>
+
                 {errores.hora && <small>{errores.hora}</small>}
 
-                {!errores.hora && (
+                {!errores.hora && errorHorarios && (
+                  <small>{errorHorarios}</small>
+                )}
+
+                {!errores.hora && !errorHorarios && (
                   <small className="reserva-modal__ayuda">
                     Cada reserva bloquea la mesa por{" "}
                     {obtenerTextoDuracionReserva(duracionMinutos)}.

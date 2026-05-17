@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RESERVA_CONFIG_DEFAULT } from "../data/reservaConfig";
-import { horaRespetaIntervalo, normalizarHora } from "../utils/reservaUtils";
+import { normalizarHora } from "../utils/reservaUtils";
+import useOpcionesHorario from "../hooks/useOpcionesHorario";
 import "../styles/busquedaDisponibilidad.css";
 
 function obtenerFechaActual() {
@@ -21,14 +22,14 @@ function BusquedaDisponibilidad({
 }) {
   const fechaActual = obtenerFechaActual();
 
-  const intervaloMinutos = Number(
-    configuracion?.intervalo_horarios_minutos ||
-      RESERVA_CONFIG_DEFAULT.intervalo_horarios_minutos,
-  );
-
   const duracionMinutos = Number(
     configuracion?.duracion_reserva_minutos ||
       RESERVA_CONFIG_DEFAULT.duracion_reserva_minutos,
+  );
+
+  const intervaloMinutos = Number(
+    configuracion?.intervalo_horarios_minutos ||
+      RESERVA_CONFIG_DEFAULT.intervalo_horarios_minutos,
   );
 
   const ocupacionMinimaPorcentaje = Number(
@@ -42,6 +43,11 @@ function BusquedaDisponibilidad({
     personas: 2,
   });
 
+  const [errores, setErrores] = useState({});
+
+  const { horario, opcionesHorario, cargandoHorarios, errorHorarios } =
+    useOpcionesHorario(formData.fecha, configuracion);
+
   useEffect(() => {
     if (!criteriosActivos) return;
 
@@ -52,7 +58,24 @@ function BusquedaDisponibilidad({
     });
   }, [criteriosActivos]);
 
-  const [errores, setErrores] = useState({});
+  useEffect(() => {
+    if (cargandoHorarios) return;
+
+    if (opcionesHorario.length === 0) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        hora: "",
+      }));
+      return;
+    }
+
+    if (!opcionesHorario.includes(formData.hora)) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        hora: opcionesHorario[0],
+      }));
+    }
+  }, [opcionesHorario, cargandoHorarios, formData.hora]);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -66,9 +89,14 @@ function BusquedaDisponibilidad({
   const validarFormulario = () => {
     const nuevosErrores = {};
     const cantidadPersonas = Number(formData.personas);
+    const horaNormalizada = normalizarHora(formData.hora);
 
     if (!formData.fecha) {
       nuevosErrores.fecha = "Selecciona una fecha.";
+    }
+
+    if (!horario || opcionesHorario.length === 0) {
+      nuevosErrores.hora = "No hay horarios habilitados para esta fecha.";
     }
 
     if (!formData.hora) {
@@ -77,9 +105,10 @@ function BusquedaDisponibilidad({
 
     if (
       formData.hora &&
-      !horaRespetaIntervalo(formData.hora, intervaloMinutos)
+      opcionesHorario.length > 0 &&
+      !opcionesHorario.includes(horaNormalizada)
     ) {
-      nuevosErrores.hora = `Usa intervalos de ${intervaloMinutos} minutos.`;
+      nuevosErrores.hora = "Selecciona un horario habilitado.";
     }
 
     if (!cantidadPersonas || cantidadPersonas < 1) {
@@ -136,15 +165,29 @@ function BusquedaDisponibilidad({
 
         <div className="busqueda-disponibilidad__grupo">
           <label htmlFor="busqueda-hora">Hora</label>
-          <input
+          <select
             id="busqueda-hora"
             name="hora"
-            type="time"
-            step={intervaloMinutos * 60}
             value={formData.hora}
             onChange={handleChange}
-          />
+            disabled={cargandoHorarios || opcionesHorario.length === 0}
+          >
+            {cargandoHorarios && <option value="">Cargando horarios...</option>}
+
+            {!cargandoHorarios && opcionesHorario.length === 0 && (
+              <option value="">Sin horarios disponibles</option>
+            )}
+
+            {!cargandoHorarios &&
+              opcionesHorario.map(hora => (
+                <option key={hora} value={hora}>
+                  {hora}
+                </option>
+              ))}
+          </select>
+
           {errores.hora && <small>{errores.hora}</small>}
+          {!errores.hora && errorHorarios && <small>{errorHorarios}</small>}
         </div>
 
         <div className="busqueda-disponibilidad__grupo">
@@ -164,7 +207,7 @@ function BusquedaDisponibilidad({
           <button
             type="submit"
             className="busqueda-disponibilidad__btn busqueda-disponibilidad__btn--principal"
-            disabled={buscando}
+            disabled={buscando || cargandoHorarios}
           >
             {buscando ? "Buscando..." : "Buscar mesas"}
           </button>
@@ -194,6 +237,15 @@ function BusquedaDisponibilidad({
         <span>
           Ocupación mínima: <strong>{ocupacionMinimaPorcentaje}%</strong>
         </span>
+
+        {horario && (
+          <span>
+            Horario del día:{" "}
+            <strong>
+              {horario.hora_inicio} - {horario.hora_fin}
+            </strong>
+          </span>
+        )}
       </div>
 
       {criteriosActivos && (
