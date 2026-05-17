@@ -345,3 +345,18 @@ set ocupacion_minima_porcentaje = 75
 where nombre = 'global';
 
 notify pgrst, 'reload schema';
+
+create policy "Permitir creacion de mesas a usuarios autenticados"
+on public.mesas
+for insert
+to authenticated
+with check (true);
+
+create policy "Permitir actualizacion de mesas a usuarios autenticados"
+on public.mesas
+for update
+to authenticated
+using (true)
+with check (true);
+
+notify pgrst, 'reload schema';
