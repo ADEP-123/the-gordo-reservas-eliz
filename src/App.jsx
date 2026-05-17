@@ -1,8 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AdminRoute from "./components/AdminRoute";
+import AdminRoute from "./components/panel-admin/AdminRoute";
 import { AuthProvider } from "./context/AuthContext";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/panel-admin/AdminDashboard";
+import AdminLogin from "./pages/panel-admin/AdminLogin";
 import SalonView from "./pages/SalonView";
 
 function App() {

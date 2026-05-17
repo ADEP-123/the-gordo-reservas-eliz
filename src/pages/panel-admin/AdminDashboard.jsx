@@ -1,71 +1,152 @@
+import { useState } from "react";
+import AdminMesasPanel from "../../components/panel-admin/AdminMesasPanel";
 import { useAuth } from "../../context/AuthContext";
-import "../styles/adminDashboard.css";
+import {
+  SECCIONES_ADMIN,
+  SECCIONES_INFO,
+} from "../../data/panel-admin/seccionesAdmin";
+import "../../styles/panel-admin/adminDashboard.css";
 
 function AdminDashboard() {
   const { usuario, cerrarSesion } = useAuth();
+  const [seccionActiva, setSeccionActiva] = useState(SECCIONES_ADMIN.mesas);
+  const [sidebarColapsado, setSidebarColapsado] = useState(false);
+  const [menuUsuarioAbierto, setMenuUsuarioAbierto] = useState(false);
+
+  const seccionActual = SECCIONES_INFO[seccionActiva];
+
+  const renderContenido = () => {
+    if (seccionActiva === SECCIONES_ADMIN.mesas) {
+      return <AdminMesasPanel />;
+    }
+
+    return (
+      <section className="admin-dashboard__placeholder">
+        <span className="admin-dashboard__label">Próximamente</span>
+        <h2>Sección en construcción</h2>
+        <p>
+          Esta sección se implementará en el siguiente avance del módulo
+          administrador.
+        </p>
+      </section>
+    );
+  };
+
+  const handleCerrarSesion = async () => {
+    setMenuUsuarioAbierto(false);
+    await cerrarSesion();
+  };
+
+  const renderUsuarioMenu = () => (
+    <div className="admin-dashboard__user-wrap">
+      <button
+        type="button"
+        className="admin-dashboard__user"
+        onClick={() => setMenuUsuarioAbierto(prev => !prev)}
+        aria-expanded={menuUsuarioAbierto}
+      >
+        <span>{usuario?.email}</span>
+        <strong aria-hidden="true">👤</strong>
+      </button>
+
+      {menuUsuarioAbierto && (
+        <div className="admin-dashboard__user-menu">
+          <button type="button" onClick={handleCerrarSesion}>
+            Cerrar sesión
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
-    <main className="admin-dashboard">
+    <main
+      className={`admin-dashboard ${
+        sidebarColapsado ? "admin-dashboard--sidebar-colapsado" : ""
+      }`}
+    >
       <aside className="admin-dashboard__sidebar">
-        <div>
-          <span className="admin-dashboard__label">The Gordo</span>
-          <h1>Admin</h1>
+        <div className="admin-dashboard__sidebar-top">
+          <div className="admin-dashboard__brand">
+            <div className="admin-dashboard__brand-text">
+              <span className="admin-dashboard__label">The Gordo</span>
+              <h1>Admin</h1>
+
+              <img
+                className="admin-dashboard__mobile-logo"
+                src="/logo.webp"
+                alt=""
+                aria-hidden="true"
+              />
+            </div>
+
+            <button
+              type="button"
+              className="admin-dashboard__collapse"
+              onClick={() => setSidebarColapsado(prev => !prev)}
+              aria-label={
+                sidebarColapsado
+                  ? "Expandir menú administrador"
+                  : "Contraer menú administrador"
+              }
+            >
+              <span className="admin-dashboard__collapse-inner">
+                <span className="admin-dashboard__collapse-face admin-dashboard__collapse-face--front">
+                  <img
+                    className="admin-dashboard__collapse-logo"
+                    src="/logo.webp"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                </span>
+
+                <span className="admin-dashboard__collapse-face admin-dashboard__collapse-face--back">
+                  {sidebarColapsado ? "→" : "←"}
+                </span>
+              </span>
+            </button>
+          </div>
+
+          <div className="admin-dashboard__mobile-summary">
+            <span className="admin-dashboard__label">Panel principal</span>
+            <h2>Gestión del restaurante</h2>
+            <p>{seccionActual.titulo}</p>
+            {renderUsuarioMenu()}
+          </div>
         </div>
 
         <nav className="admin-dashboard__nav">
-          <button type="button" className="admin-dashboard__nav-item active">
-            Mesas
-          </button>
-          <button type="button" className="admin-dashboard__nav-item">
-            Reservas
-          </button>
-          <button type="button" className="admin-dashboard__nav-item">
-            Horarios
-          </button>
-          <button type="button" className="admin-dashboard__nav-item">
-            Configuración
-          </button>
+          {Object.entries(SECCIONES_INFO).map(([key, seccion]) => (
+            <button
+              key={key}
+              type="button"
+              className={`admin-dashboard__nav-item ${
+                seccionActiva === key ? "active" : ""
+              }`}
+              onClick={() => setSeccionActiva(key)}
+              title={seccion.label}
+            >
+              <span className="admin-dashboard__nav-icon">
+                {seccion.inicial}
+              </span>
+              <span className="admin-dashboard__nav-text">{seccion.label}</span>
+            </button>
+          ))}
         </nav>
-
-        <button
-          type="button"
-          className="admin-dashboard__logout"
-          onClick={cerrarSesion}
-        >
-          Cerrar sesión
-        </button>
       </aside>
 
       <section className="admin-dashboard__content">
-        <header className="admin-dashboard__header">
-          <div>
+        <header className="admin-dashboard__topbar">
+          <div className="admin-dashboard__title">
             <span className="admin-dashboard__label">Panel principal</span>
             <h2>Gestión del restaurante</h2>
-            <p>
-              Sesión iniciada como <strong>{usuario?.email}</strong>.
-            </p>
+            <p>{seccionActual.titulo}</p>
           </div>
+
+          {renderUsuarioMenu()}
         </header>
 
-        <div className="admin-dashboard__cards">
-          <article>
-            <span>Mesas</span>
-            <strong>Gestión pendiente</strong>
-            <p>Crear, editar, bloquear y desbloquear mesas.</p>
-          </article>
-
-          <article>
-            <span>Reservas</span>
-            <strong>Gestión pendiente</strong>
-            <p>Consultar y cancelar reservas realizadas.</p>
-          </article>
-
-          <article>
-            <span>Horarios</span>
-            <strong>Gestión pendiente</strong>
-            <p>Configurar días activos, apertura y cierre.</p>
-          </article>
-        </div>
+        {renderContenido()}
       </section>
     </main>
   );

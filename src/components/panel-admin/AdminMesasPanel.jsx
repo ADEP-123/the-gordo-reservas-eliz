@@ -1,17 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ESTADOS_MESA } from "../../data/estadosMesa";
 import useAdminMesas from "../../hooks/panel-admin/useAdminMesas";
-import "../styles/adminMesasPanel.css";
-
-const FORM_INICIAL = {
-  id: null,
-  numero: "",
-  capacidad: "",
-  ubicacion: "Zona central",
-  estado: ESTADOS_MESA.disponible.valor,
-};
-
-const UBICACIONES_MESA = ["Zona ventana", "Zona central", "Terraza"];
+import {
+  FORM_MESA_INICIAL,
+  UBICACIONES_MESA,
+} from "../../data/panel-admin/mesasAdminConfig";
+import "../../styles/panel-admin/adminMesasPanel.css";
 
 function AdminMesasPanel() {
   const {
@@ -23,10 +17,28 @@ function AdminMesasPanel() {
     actualizarEstadoMesa,
   } = useAdminMesas();
 
-  const [formData, setFormData] = useState(FORM_INICIAL);
+  const [formData, setFormData] = useState(FORM_MESA_INICIAL);
   const [errores, setErrores] = useState({});
+  const [mesaActivaId, setMesaActivaId] = useState("");
 
   const estaEditando = Boolean(formData.id);
+
+  useEffect(() => {
+    if (mesas.length === 0) {
+      setMesaActivaId("");
+      return;
+    }
+
+    const existeMesaActiva = mesas.some(mesa => mesa.id === mesaActivaId);
+
+    if (!existeMesaActiva) {
+      setMesaActivaId(mesas[0].id);
+    }
+  }, [mesas, mesaActivaId]);
+
+  const mesaActiva = useMemo(() => {
+    return mesas.find(mesa => mesa.id === mesaActivaId) || null;
+  }, [mesas, mesaActivaId]);
 
   const resumen = useMemo(() => {
     return {
@@ -38,7 +50,7 @@ function AdminMesasPanel() {
   }, [mesas]);
 
   const limpiarFormulario = () => {
-    setFormData(FORM_INICIAL);
+    setFormData(FORM_MESA_INICIAL);
     setErrores({});
   };
 
@@ -100,18 +112,35 @@ function AdminMesasPanel() {
     setErrores({});
   };
 
+  const renderAccionesMesa = mesa => (
+    <div className="admin-mesas__acciones">
+      <button type="button" onClick={() => editarMesa(mesa)}>
+        Editar
+      </button>
+
+      {mesa.estado !== "bloqueada" ? (
+        <button
+          type="button"
+          onClick={() => actualizarEstadoMesa(mesa.id, "bloqueada")}
+          disabled={guardandoMesa}
+        >
+          Bloquear
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => actualizarEstadoMesa(mesa.id, "disponible")}
+          disabled={guardandoMesa}
+        >
+          Activar
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <section className="admin-mesas">
-      <header className="admin-mesas__header">
-        <div>
-          <span className="admin-mesas__label">Gestión de mesas</span>
-          <h2>Mesas del restaurante</h2>
-          <p>
-            Crea mesas, ajusta su capacidad, cambia la zona y controla su estado
-            operativo.
-          </p>
-        </div>
-
+      <header className="admin-mesas__header admin-mesas__header--compact">
         <div className="admin-mesas__stats">
           <article>
             <span>Total</span>
@@ -246,74 +275,94 @@ function AdminMesasPanel() {
               Todavía no hay mesas registradas.
             </div>
           ) : (
-            <div className="admin-mesas__tabla">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Mesa</th>
-                    <th>Capacidad</th>
-                    <th>Ubicación</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-
-                <tbody>
+            <>
+              <div className="admin-mesas__selector-movil">
+                <label htmlFor="mesa-activa">Selecciona una mesa</label>
+                <select
+                  id="mesa-activa"
+                  value={mesaActivaId}
+                  onChange={event => setMesaActivaId(event.target.value)}
+                >
                   {mesas.map(mesa => (
-                    <tr key={mesa.id}>
-                      <td>
-                        <strong>Mesa {mesa.numero}</strong>
-                      </td>
-
-                      <td>{mesa.capacidad} personas</td>
-
-                      <td>{mesa.ubicacion}</td>
-
-                      <td>
-                        <span
-                          className={`admin-mesas__estado admin-mesas__estado--${mesa.estado}`}
-                        >
-                          {ESTADOS_MESA[mesa.estado]?.texto || mesa.estado}
-                        </span>
-                      </td>
-
-                      <td>
-                        <div className="admin-mesas__acciones">
-                          <button
-                            type="button"
-                            onClick={() => editarMesa(mesa)}
-                          >
-                            Editar
-                          </button>
-
-                          {mesa.estado !== "bloqueada" ? (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                actualizarEstadoMesa(mesa.id, "bloqueada")
-                              }
-                              disabled={guardandoMesa}
-                            >
-                              Bloquear
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                actualizarEstadoMesa(mesa.id, "disponible")
-                              }
-                              disabled={guardandoMesa}
-                            >
-                              Activar
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
+                    <option key={mesa.id} value={mesa.id}>
+                      Mesa {mesa.numero} · {mesa.capacidad} personas ·{" "}
+                      {mesa.ubicacion}
+                    </option>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </select>
+              </div>
+
+              {mesaActiva && (
+                <article className="admin-mesas__detalle-movil">
+                  <div>
+                    <span className="admin-mesas__label">
+                      Mesa seleccionada
+                    </span>
+                    <h4>Mesa {mesaActiva.numero}</h4>
+                  </div>
+
+                  <div className="admin-mesas__detalle-grid">
+                    <p>
+                      <span>Capacidad</span>
+                      <strong>{mesaActiva.capacidad} personas</strong>
+                    </p>
+
+                    <p>
+                      <span>Ubicación</span>
+                      <strong>{mesaActiva.ubicacion}</strong>
+                    </p>
+
+                    <p>
+                      <span>Estado</span>
+                      <strong>
+                        {ESTADOS_MESA[mesaActiva.estado]?.texto ||
+                          mesaActiva.estado}
+                      </strong>
+                    </p>
+                  </div>
+
+                  {renderAccionesMesa(mesaActiva)}
+                </article>
+              )}
+
+              <div className="admin-mesas__tabla">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Mesa</th>
+                      <th>Capacidad</th>
+                      <th>Ubicación</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {mesas.map(mesa => (
+                      <tr key={mesa.id}>
+                        <td>
+                          <strong>Mesa {mesa.numero}</strong>
+                        </td>
+
+                        <td>{mesa.capacidad} personas</td>
+
+                        <td>{mesa.ubicacion}</td>
+
+                        <td>
+                          <span
+                            className={`admin-mesas__estado admin-mesas__estado--${mesa.estado}`}
+                          >
+                            {ESTADOS_MESA[mesa.estado]?.texto || mesa.estado}
+                          </span>
+                        </td>
+
+                        <td>{renderAccionesMesa(mesa)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </section>
       </div>

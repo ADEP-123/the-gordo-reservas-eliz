@@ -20,6 +20,7 @@
 
 .admin-login__card {
   width: min(440px, 100%);
+  box-sizing: border-box;
   padding: 1.6rem;
   border-radius: 26px;
   border: 1px solid rgba(255, 155, 5, 0.22);
@@ -39,6 +40,7 @@
 
 .admin-login h1 {
   margin: 0;
+  color: #fff4e8;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -61,6 +63,7 @@
 }
 
 .admin-login__grupo label {
+  color: #fff4e8;
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -98,6 +101,7 @@
   padding: 0.9rem 1rem;
   color: #1a0f0c;
   background: linear-gradient(90deg, #ffc905, #ff9b05);
+  font-family: inherit;
   font-weight: 900;
   cursor: pointer;
 }
@@ -105,4 +109,19 @@
 .admin-login button:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .admin-login {
+    padding: 1rem;
+  }
+
+  .admin-login__card {
+    padding: 1.2rem;
+    border-radius: 22px;
+  }
+
+  .admin-login p {
+    font-size: 0.92rem;
+  }
 }
