@@ -1,0 +1,108 @@
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  color: #fff4e8;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(249, 87, 42, 0.16),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 201, 5, 0.08),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #21120e, #100705);
+}
+
+.admin-login__card {
+  width: min(440px, 100%);
+  padding: 1.6rem;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 155, 5, 0.22);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
+}
+
+.admin-login__label {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #ff9b05;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.admin-login h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-login p {
+  margin: 0.7rem 0 1.3rem;
+  color: #c8a98d;
+  line-height: 1.5;
+}
+
+.admin-login__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-login__grupo {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.admin-login__grupo label {
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.admin-login__grupo input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  color: #fff4e8;
+  background: rgba(0, 0, 0, 0.24);
+  font-family: inherit;
+  outline: none;
+}
+
+.admin-login__grupo input:focus {
+  border-color: rgba(255, 155, 5, 0.82);
+  box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.admin-login__error {
+  padding: 0.8rem 0.9rem;
+  border-radius: 14px;
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.1);
+  border: 1px solid rgba(255, 78, 106, 0.16);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.admin-login button {
+  border: none;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-login button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
