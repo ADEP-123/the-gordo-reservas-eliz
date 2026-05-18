@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function AdminRoute({ children }) {
-  const { estaAutenticado, cargandoSesion } = useAuth();
+  const { estaAutenticado, esAdmin, cargandoSesion } = useAuth();
 
   if (cargandoSesion) {
     return (
@@ -12,7 +12,7 @@ function AdminRoute({ children }) {
     );
   }
 
-  if (!estaAutenticado) {
+  if (!estaAutenticado || !esAdmin) {
     return <Navigate to="/admin/login" replace />;
   }
 

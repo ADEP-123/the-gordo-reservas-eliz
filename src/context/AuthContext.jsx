@@ -3,33 +3,102 @@ import { supabase } from "../services/supabaseClient";
 
 const AuthContext = createContext(null);
 
+async function verificarPermisoAdmin() {
+  const { data, error } = await supabase.rpc("is_admin");
+
+  if (error) {
+    console.error("Error al verificar permisos de admin:", error);
+    return false;
+  }
+
+  return Boolean(data);
+}
+
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
-  const [cargandoSesion, setCargandoSesion] = useState(true);
+  const [esAdmin, setEsAdmin] = useState(false);
+  const [cargandoSesionBase, setCargandoSesionBase] = useState(true);
+  const [verificandoAdmin, setVerificandoAdmin] = useState(false);
 
   useEffect(() => {
-    const cargarSesion = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+    let componenteActivo = true;
 
-      setUsuario(session?.user || null);
-      setCargandoSesion(false);
+    const cargarSesionInicial = async () => {
+      try {
+        setCargandoSesionBase(true);
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!componenteActivo) return;
+
+        setUsuario(session?.user || null);
+      } catch (error) {
+        console.error("Error al cargar sesión:", error);
+
+        if (!componenteActivo) return;
+
+        setUsuario(null);
+        setEsAdmin(false);
+      } finally {
+        if (componenteActivo) {
+          setCargandoSesionBase(false);
+        }
+      }
     };
 
-    cargarSesion();
+    cargarSesionInicial();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUsuario(session?.user || null);
-      setCargandoSesion(false);
+      const user = session?.user || null;
+
+      setUsuario(user);
+
+      if (!user) {
+        setEsAdmin(false);
+      }
     });
 
     return () => {
+      componenteActivo = false;
       subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    let componenteActivo = true;
+
+    const validarAdmin = async () => {
+      if (!usuario?.id) {
+        setEsAdmin(false);
+        setVerificandoAdmin(false);
+        return;
+      }
+
+      try {
+        setVerificandoAdmin(true);
+
+        const admin = await verificarPermisoAdmin();
+
+        if (!componenteActivo) return;
+
+        setEsAdmin(admin);
+      } finally {
+        if (componenteActivo) {
+          setVerificandoAdmin(false);
+        }
+      }
+    };
+
+    validarAdmin();
+
+    return () => {
+      componenteActivo = false;
+    };
+  }, [usuario?.id]);
 
   const iniciarSesion = async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -44,7 +113,24 @@ export function AuthProvider({ children }) {
       };
     }
 
+    const admin = await verificarPermisoAdmin();
+
+    if (!admin) {
+      await supabase.auth.signOut();
+
+      setUsuario(null);
+      setEsAdmin(false);
+
+      return {
+        usuario: null,
+        error: {
+          message: "El usuario no tiene permisos de administrador.",
+        },
+      };
+    }
+
     setUsuario(data.user);
+    setEsAdmin(true);
 
     return {
       usuario: data.user,
@@ -54,18 +140,23 @@ export function AuthProvider({ children }) {
 
   const cerrarSesion = async () => {
     await supabase.auth.signOut();
+
     setUsuario(null);
+    setEsAdmin(false);
   };
+
+  const cargandoSesion = cargandoSesionBase || verificandoAdmin;
 
   const value = useMemo(
     () => ({
       usuario,
+      esAdmin,
       cargandoSesion,
       estaAutenticado: Boolean(usuario),
       iniciarSesion,
       cerrarSesion,
     }),
-    [usuario, cargandoSesion],
+    [usuario, esAdmin, cargandoSesion],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
