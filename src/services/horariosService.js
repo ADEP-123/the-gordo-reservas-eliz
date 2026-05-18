@@ -164,3 +164,14 @@ export const updateHorario = async (id, cambios) => {
 export const toggleHorario = async (id, activo) => {
   return await updateHorario(id, { activo });
 };
+
+export const getHorariosAdmin = async () => {
+  const { data, error } = await supabase.from("horarios").select("*");
+
+  if (error) {
+    console.error("Error al obtener horarios para admin:", error);
+    return [];
+  }
+
+  return data;
+};

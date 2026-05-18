@@ -1,0 +1,289 @@
+.admin-horarios,
+.admin-horarios * {
+  box-sizing: border-box;
+}
+
+.admin-horarios {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+.admin-horarios__label {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  color: #ff9b05;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.admin-horarios__error {
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.1);
+  border: 1px solid rgba(255, 78, 106, 0.16);
+  font-weight: 800;
+}
+
+.admin-horarios__layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.admin-horarios__form,
+.admin-horarios__card {
+  min-width: 0;
+  padding: 1rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 5, 0.08),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-horarios__form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.admin-horarios__form h3,
+.admin-horarios__card-header h3 {
+  margin: 0;
+  color: #fff4e8;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-horarios__fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.admin-horarios__grupo {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.admin-horarios__grupo label {
+  color: #fff4e8;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.admin-horarios__grupo input,
+.admin-horarios__grupo select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  color: #fff4e8;
+  background: rgba(0, 0, 0, 0.24);
+  font-family: inherit;
+  outline: none;
+}
+
+.admin-horarios__grupo input:focus,
+.admin-horarios__grupo select:focus {
+  border-color: rgba(255, 155, 5, 0.82);
+  box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.admin-horarios__grupo small {
+  color: #ff8c72;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.admin-horarios__switch {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff4e8;
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-horarios__switch input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #ff9b05;
+}
+
+.admin-horarios__btn {
+  border: none;
+  border-radius: 13px;
+  padding: 0.8rem 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-horarios__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-horarios__btn--principal {
+  color: #1a0f0c;
+  background: linear-gradient(90deg, #ffc905, #ff9b05);
+}
+
+.admin-horarios__card-header {
+  margin-bottom: 1rem;
+}
+
+.admin-horarios__lista {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.admin-horarios__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-horarios__item--activo {
+  border-color: rgba(255, 155, 5, 0.42);
+  box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.08);
+}
+
+.admin-horarios__item-main {
+  min-width: 0;
+  display: grid;
+  gap: 0.2rem;
+  border: none;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-horarios__item-main span {
+  color: #fff4e8;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.admin-horarios__item-main strong {
+  color: #c8a98d;
+  font-size: 0.86rem;
+}
+
+.admin-horarios__estado-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.admin-horarios__estado-pill:hover {
+  transform: translateY(-1px);
+}
+
+.admin-horarios__estado-pill:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.admin-horarios__estado-pill span {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 999px;
+}
+
+.admin-horarios__estado-pill--activo {
+  color: #46d483;
+  background: rgba(70, 212, 131, 0.12);
+  box-shadow: 0 0 0 1px rgba(70, 212, 131, 0.12);
+}
+
+.admin-horarios__estado-pill--activo span {
+  background: #46d483;
+  box-shadow: 0 0 10px rgba(70, 212, 131, 0.6);
+}
+
+.admin-horarios__estado-pill--inactivo {
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.12);
+  box-shadow: 0 0 0 1px rgba(255, 78, 106, 0.12);
+}
+
+.admin-horarios__estado-pill--inactivo span {
+  background: #ff8c72;
+  box-shadow: 0 0 10px rgba(255, 78, 106, 0.5);
+}
+
+.admin-horarios__empty {
+  padding: 1.2rem;
+  border-radius: 16px;
+  color: #c8a98d;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px dashed rgba(255, 201, 5, 0.14);
+}
+
+@media (max-width: 980px) {
+  .admin-horarios__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-horarios {
+    gap: 0.8rem;
+  }
+
+  .admin-horarios__form,
+  .admin-horarios__card {
+    padding: 0.8rem;
+    border-radius: 18px;
+  }
+
+  .admin-horarios__fila {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-horarios__item {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .admin-horarios__estado-pill {
+    width: 100%;
+  }
+
+  .admin-horarios__btn {
+    width: 100%;
+  }
+}
