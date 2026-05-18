@@ -3,6 +3,8 @@ import AdminRoute from "./components/panel-admin/AdminRoute";
 import { AuthProvider } from "./context/AuthContext";
 import AdminDashboard from "./pages/panel-admin/AdminDashboard";
 import AdminLogin from "./pages/panel-admin/AdminLogin";
+import AdminForgotPassword from "./pages/panel-admin/AdminForgotPassword";
+import AdminResetPassword from "./pages/panel-admin/AdminResetPassword";
 import SalonView from "./pages/SalonView";
 
 function App() {
@@ -13,7 +15,14 @@ function App() {
           <Route path="/" element={<SalonView />} />
 
           <Route path="/admin/login" element={<AdminLogin />} />
-
+          <Route
+            path="/admin/forgot-password"
+            element={<AdminForgotPassword />}
+          />
+          <Route
+            path="/admin/reset-password"
+            element={<AdminResetPassword />}
+          />
           <Route
             path="/admin"
             element={

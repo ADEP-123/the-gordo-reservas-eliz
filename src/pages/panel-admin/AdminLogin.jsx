@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/panel-admin/adminLogin.css";
 
@@ -59,7 +59,7 @@ function AdminLogin() {
       });
 
       if (error) {
-        setError("Credenciales incorrectas o usuario no autorizado.");
+        setError(error.message || "No fue posible iniciar sesión.");
         return;
       }
 
@@ -107,7 +107,9 @@ function AdminLogin() {
           </div>
 
           {error && <div className="admin-login__error">{error}</div>}
-
+          <Link className="admin-login__link" to="/admin/forgot-password">
+            ¿Olvidaste tu contraseña?
+          </Link>
           <button type="submit" disabled={cargando}>
             {cargando ? "Ingresando..." : "Ingresar al panel"}
           </button>

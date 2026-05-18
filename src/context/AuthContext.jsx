@@ -124,7 +124,8 @@ export function AuthProvider({ children }) {
       return {
         usuario: null,
         error: {
-          message: "El usuario no tiene permisos de administrador.",
+          message:
+            "El usuario inició sesión correctamente, pero no está registrado como administrador.",
         },
       };
     }
