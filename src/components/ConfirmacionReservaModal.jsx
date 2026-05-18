@@ -48,6 +48,7 @@ function ConfirmacionReservaModal({
           reserva.fecha,
           reserva.hora,
           reserva.duracion_minutos,
+          reserva.num_personas,
         );
 
         if (!componenteActivo) return;

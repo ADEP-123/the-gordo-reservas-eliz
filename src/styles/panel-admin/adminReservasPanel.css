@@ -1,0 +1,330 @@
+.admin-reservas,
+.admin-reservas * {
+  box-sizing: border-box;
+}
+
+.admin-reservas {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+.admin-reservas__label {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  color: #ff9b05;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.admin-reservas__error {
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.1);
+  border: 1px solid rgba(255, 78, 106, 0.16);
+  font-weight: 800;
+}
+
+.admin-reservas__filtros,
+.admin-reservas__tabla-card {
+  padding: 1rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 5, 0.08),
+      transparent 34%
+    ),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-reservas__filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.admin-reservas__grupo {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.admin-reservas__grupo label,
+.admin-reservas__selector-movil label {
+  color: #fff4e8;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.admin-reservas__grupo input,
+.admin-reservas__grupo select,
+.admin-reservas__selector-movil select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  color: #fff4e8;
+  background: rgba(0, 0, 0, 0.24);
+  font-family: inherit;
+  outline: none;
+}
+
+.admin-reservas__grupo input:focus,
+.admin-reservas__grupo select:focus,
+.admin-reservas__selector-movil select:focus {
+  border-color: rgba(255, 155, 5, 0.82);
+  box-shadow: 0 0 0 3px rgba(255, 155, 5, 0.12);
+}
+
+.admin-reservas__btn {
+  border: none;
+  border-radius: 13px;
+  padding: 0.8rem 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-reservas__btn--secundario {
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-reservas__tabla-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-reservas__tabla-header h3 {
+  margin: 0;
+  color: #fff4e8;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-reservas__tabla {
+  overflow-x: auto;
+}
+
+.admin-reservas__tabla table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+.admin-reservas__tabla th,
+.admin-reservas__tabla td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-reservas__tabla th {
+  color: #ff9b05;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.admin-reservas__tabla td {
+  color: #ead8c3;
+  font-size: 0.9rem;
+}
+
+.admin-reservas__tabla td strong {
+  display: block;
+  color: #fff4e8;
+}
+
+.admin-reservas__tabla td small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #c8a98d;
+}
+
+.admin-reservas__estado {
+  display: inline-flex;
+  padding: 0.34rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.admin-reservas__estado--activa {
+  color: #46d483;
+  background: rgba(70, 212, 131, 0.12);
+}
+
+.admin-reservas__estado--completada {
+  color: #ffc905;
+  background: rgba(255, 201, 5, 0.12);
+}
+
+.admin-reservas__estado--cancelada {
+  color: #ff8c72;
+  background: rgba(255, 78, 106, 0.12);
+}
+
+.admin-reservas__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.admin-reservas__acciones button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  color: #fff4e8;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-reservas__acciones button:hover {
+  background: rgba(255, 155, 5, 0.22);
+}
+
+.admin-reservas__acciones button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-reservas__sin-acciones {
+  color: #c8a98d;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.admin-reservas__empty {
+  padding: 1.2rem;
+  border-radius: 16px;
+  color: #c8a98d;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px dashed rgba(255, 201, 5, 0.14);
+}
+
+.admin-reservas__selector-movil,
+.admin-reservas__detalle-movil {
+  display: none;
+}
+
+.admin-reservas__selector-movil {
+  margin-bottom: 1rem;
+}
+
+.admin-reservas__selector-movil label {
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.admin-reservas__detalle-movil {
+  padding: 1rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 5, 0.08),
+      transparent 34%
+    ),
+    rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-reservas__detalle-movil h4 {
+  margin: 0;
+  color: #fff4e8;
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.admin-reservas__detalle-grid {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.admin-reservas__detalle-grid p {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-reservas__detalle-grid span {
+  color: #c8a98d;
+  font-weight: 800;
+}
+
+.admin-reservas__detalle-grid strong {
+  color: #fff4e8;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .admin-reservas__filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-reservas__btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-reservas {
+    gap: 0.8rem;
+  }
+
+  .admin-reservas__filtros,
+  .admin-reservas__tabla-card {
+    padding: 0.8rem;
+    border-radius: 18px;
+  }
+
+  .admin-reservas__selector-movil,
+  .admin-reservas__detalle-movil {
+    display: block;
+  }
+
+  .admin-reservas__tabla {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-reservas__detalle-grid p {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .admin-reservas__detalle-grid strong {
+    text-align: left;
+  }
+
+  .admin-reservas__detalle-movil .admin-reservas__acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-reservas__detalle-movil .admin-reservas__acciones button {
+    width: 100%;
+    text-align: center;
+  }
+}
