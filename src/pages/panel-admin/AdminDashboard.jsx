@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AdminMesasPanel from "../../components/panel-admin/AdminMesasPanel";
+import AdminReservasPanel from "../../components/panel-admin/AdminReservasPanel";
 import { useAuth } from "../../context/AuthContext";
 import {
   SECCIONES_ADMIN,
@@ -18,6 +19,10 @@ function AdminDashboard() {
   const renderContenido = () => {
     if (seccionActiva === SECCIONES_ADMIN.mesas) {
       return <AdminMesasPanel />;
+    }
+
+    if (seccionActiva === SECCIONES_ADMIN.reservas) {
+      return <AdminReservasPanel />;
     }
 
     return (

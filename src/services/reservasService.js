@@ -145,15 +145,25 @@ export const buscarSiguienteHorarioDisponible = async ({
 // Cancelar reserva.
 // Solo admin podrá hacerlo por RLS.
 export const cancelarReserva = async id => {
+  return await cambiarEstadoReserva(id, "cancelada");
+};
+
+export const cambiarEstadoReserva = async (id, estado) => {
   const { data, error } = await supabase
     .from("reservas")
-    .update({ estado: "cancelada" })
+    .update({ estado })
     .eq("id", id)
-    .select()
+    .select(
+      `
+      *,
+      mesas (numero, capacidad, ubicacion),
+      clientes (cliente_nombre, cliente_tel, cliente_email)
+    `,
+    )
     .single();
 
   if (error) {
-    console.error("Error al cancelar reserva:", error);
+    console.error("Error al cambiar estado de reserva:", error);
     return null;
   }
 
