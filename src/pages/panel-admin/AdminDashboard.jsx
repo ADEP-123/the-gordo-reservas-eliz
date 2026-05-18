@@ -2,6 +2,7 @@ import { useState } from "react";
 import AdminMesasPanel from "../../components/panel-admin/AdminMesasPanel";
 import AdminReservasPanel from "../../components/panel-admin/AdminReservasPanel";
 import AdminHorariosPanel from "../../components/panel-admin/AdminHorariosPanel";
+import AdminConfiguracionPanel from "../../components/panel-admin/AdminConfiguracionPanel";
 import { useAuth } from "../../context/AuthContext";
 import {
   SECCIONES_ADMIN,
@@ -28,6 +29,10 @@ function AdminDashboard() {
 
     if (seccionActiva === SECCIONES_ADMIN.horarios) {
       return <AdminHorariosPanel />;
+    }
+
+    if (seccionActiva === SECCIONES_ADMIN.configuracion) {
+      return <AdminConfiguracionPanel />;
     }
 
     return (
