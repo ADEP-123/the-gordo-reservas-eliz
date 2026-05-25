@@ -317,3 +317,8 @@ Este proyecto fue desarrollado como trabajo académico de la asignatura configur
 | **Código**        | [GitHub Repository](https://github.com/ADEP-123/the-gordo-reservas-eliz) |
 | **Documentación** | [Documento de Requisitos](./database/schema.sql)                         |
 | **Panel Admin**   | [/admin/login](https://the-gordo-reservas-eliz.vercel.app/admin/login)   |
+
+## Usuario Admin
+Usuario admin para testeo:
+email: admin@thegordo.com
+pass: Admin123456789*
